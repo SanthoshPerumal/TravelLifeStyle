@@ -4,3 +4,12 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 .swiftpm/
+.build/
+*.xcuserdatad
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.claude/

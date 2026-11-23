@@ -7,7 +7,7 @@ import CoreImage.CIFilterBuiltins
 struct EventCard: View {
     @EnvironmentObject var app: AppState
     let event: Event
-    var photoHeight: CGFloat = 210
+    var photoHeight: CGFloat = 270
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

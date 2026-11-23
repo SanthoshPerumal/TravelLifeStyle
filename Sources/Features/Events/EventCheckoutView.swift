@@ -21,7 +21,7 @@ struct EventCheckoutView: View {
                     .background(Theme.goldSoft.opacity(0.6), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
                 HStack(spacing: 14) {
-                    FillPhoto(name: e.photo, width: 88, height: 88)
+                    FillPhoto(name: e.photo, width: 96, height: 112)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     VStack(alignment: .leading, spacing: 4) {
                         Text(e.title).font(.ltHeadline)
@@ -155,7 +155,7 @@ struct EventConfirmedView: View {
             }
             .frame(maxWidth: .infinity).padding(24).card()
 
-            if let e { EventCard(event: e, photoHeight: 200) }
+            if let e { EventCard(event: e, photoHeight: 250) }
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("\(tickets.count) mobile ticket\(tickets.count == 1 ? "" : "s")").font(.ltHeadline)

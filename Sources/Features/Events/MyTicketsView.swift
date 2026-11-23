@@ -45,7 +45,7 @@ struct MyTicketsView: View {
         let seats = tickets.map { "\($0.seat.row)\($0.seat.number)" }.joined(separator: ", ")
         let statuses = Set(tickets.map(\.status.title))
         return VStack(alignment: .leading, spacing: 0) {
-            FillPhoto(name: e.photo, height: 190)
+            FillPhoto(name: e.photo, height: 250)
                 .saturation(e.isPast ? 0.3 : 1)
                 .overlay(alignment: .topLeading) { DateBadge(event: e).padding(12) }
             HStack(alignment: .top) {
@@ -97,7 +97,7 @@ struct EventTicketsView: View {
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                .frame(height: 520)
+                .frame(height: 570)
 
                 PageIndicator(count: tickets.count, current: page, label: "Ticket") { i in withAnimation { page = i } }
                     .frame(maxWidth: .infinity)
@@ -114,7 +114,7 @@ struct EventTicketsView: View {
     /// The mobile ticket itself.
     private func ticketPass(_ e: Event, _ t: Ticket, index: Int) -> some View {
         VStack(spacing: 0) {
-            FillPhoto(name: e.photo, height: 150)
+            FillPhoto(name: e.photo, height: 200)
                 .overlay(alignment: .bottomLeading) {
                     Text(e.title).font(.ltHeadline).foregroundStyle(.white)
                         .padding(14).frame(maxWidth: .infinity, alignment: .leading)

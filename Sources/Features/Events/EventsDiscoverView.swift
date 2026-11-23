@@ -62,7 +62,7 @@ struct EventsDiscoverView: View {
                     SectionTitle(text: "Recommended for you")
                     CardCarousel(items: recommended, itemWidth: Self.wideWidth, itemLabel: "Event") { e in
                         Button { app.push(.eventDetail(e.id)) } label: {
-                            EventCard(event: e, photoHeight: 190).frame(width: Self.wideWidth)
+                            EventCard(event: e, photoHeight: 250).frame(width: Self.wideWidth)
                         }
                         .buttonStyle(.plain)
                     }

@@ -8,7 +8,7 @@ struct EventDetailView: View {
     var body: some View {
         if let e = Sample.event(eventID) {
             Screen(title: e.category.title) {
-                FillPhoto(name: e.photo, height: 280)
+                FillPhoto(name: e.photo, height: 360)
                     .overlay(alignment: .topLeading) { DateBadge(event: e).padding(14) }
                     .overlay(alignment: .topTrailing) { FavoriteButton(eventID: e.id).padding(12) }
                     .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))

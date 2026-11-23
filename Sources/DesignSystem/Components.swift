@@ -57,18 +57,33 @@ struct PillButton: View {
         Button(action: action) {
             Text(title)
                 .font(.ltHeadline)
-                .foregroundStyle(kind == .primary ? Color.white : Theme.button)
                 .padding(.horizontal, fullWidth ? 0 : 28)
                 .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 52)
-                .background(kind == .primary ? Theme.button : Color.white, in: Capsule())
-                .overlay {
-                    if kind == .secondary { Capsule().strokeBorder(Theme.button, lineWidth: 1) }
-                }
-                .opacity(enabled ? 1 : 0.35)
                 .contentShape(Capsule())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PillButtonStyle(kind: kind))
         .disabled(!enabled)   // disabled state doubles as form validation
+    }
+}
+
+/// Colors for `PillButton`. A custom style (not `.plain`) so the disabled look is
+/// ours: light grey fill with readable grey text instead of a faded button.
+private struct PillButtonStyle: ButtonStyle {
+    let kind: PillButton.Kind
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        let primary = kind == .primary
+        let text: Color = !isEnabled ? Theme.buttonDisabledText : primary ? .white : Theme.button
+        let fill: Color = !isEnabled ? (primary ? Theme.buttonDisabled : .white) : primary ? Theme.button : .white
+        let border: Color = !isEnabled ? Theme.buttonDisabled : Theme.button
+        return configuration.label
+            .foregroundStyle(text)
+            .background(fill, in: Capsule())
+            .overlay {
+                if !primary { Capsule().strokeBorder(border, lineWidth: 1) }
+            }
+            .opacity(configuration.isPressed ? 0.8 : 1)
     }
 }
 

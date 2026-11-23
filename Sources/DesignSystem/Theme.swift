@@ -33,6 +33,9 @@ enum Theme {
     /// Fill for primary buttons and outline/text for secondary buttons
     /// (dark warm brown, replaces red on buttons).
     static let button     = Color(hex: 0x463D3A)
+    /// Disabled buttons: light grey fill with mid-grey text (still readable).
+    static let buttonDisabled     = Color(hex: 0xE5E5EA)
+    static let buttonDisabledText = Color(hex: 0x6E6E73)
 
     // Surfaces
     static let background = Color(hex: 0xF5F5F7)   // app background

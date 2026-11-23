@@ -3,6 +3,18 @@ import SwiftUI
 /// Day 1 – Landing page: balance, "Travel, dining & experiences" grid, hotel offers, plans, tab bar.
 struct LandingView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    /// Screen shown in the secondary column on wide layouts (iPhone Duo open,
+    /// iPad). Defaults to the trip itinerary from "Trip details".
+    @State private var detail: Route = .itinerary
+
+    private var isSplit: Bool { sizeClass == .regular }
+
+    /// Phone: push the screen. Wide layout: show it beside the landing page.
+    private func open(_ route: Route) {
+        if isSplit { app.tab = .home; detail = route } else { app.push(route) }
+    }
 
     /// One tile in the "Travel, dining & experiences" grid. `route == nil` means "not in this release".
     private struct Service: Identifiable {
@@ -29,6 +41,21 @@ struct LandingView: View {
     private var offers: [Hotel] { Sample.hotels.filter { $0.percentOff > 0 } }
 
     var body: some View {
+        AdaptiveSplit {
+            home
+        } secondary: {
+            // Explore, Bookings and Profile fill this column when their tab is picked.
+            switch app.tab {
+            case .home:     RouteView(route: detail).id(detail)
+            case .explore:  ExploreView()
+            case .bookings: BookingsView()
+            case .profile:  PreferencesView()
+            }
+        }
+        .toolbar(.hidden, for: .navigationBar)          // custom glass header instead
+    }
+
+    private var home: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Tinted top section: header, greeting and "Ask Fargo" search.
@@ -69,7 +96,8 @@ struct LandingView: View {
             }
             .ignoresSafeArea()
         }
-        .toolbar(.hidden, for: .navigationBar)          // custom glass header instead
+        // On a phone `RootView` adds the tab bar; side by side it belongs to this column.
+        .safeAreaInset(edge: .bottom) { if isSplit { AppTabBar() } }
     }
 
     // MARK: Header (glass controls)
@@ -197,7 +225,7 @@ struct LandingView: View {
 
     private var fargoSearch: some View {
         HStack(spacing: 12) {
-            Button { app.push(.fargo) } label: {
+            Button { open(.fargo) } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass").foregroundStyle(Theme.textSecondary)
                     Text("Need help? Ask Fargo").foregroundStyle(Theme.textBody)
@@ -211,7 +239,7 @@ struct LandingView: View {
             }
             .buttonStyle(.plain)
 
-            Button { app.push(.fargo) } label: {
+            Button { open(.fargo) } label: {
                 Image(systemName: "bubble.left.and.text.bubble.right.fill")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.icon)
@@ -233,9 +261,11 @@ struct LandingView: View {
             // White cards with a soft tinted icon tile; "Soon" on services not open yet.
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
                 ForEach(services) { s in
-                    Button { if let r = s.route { app.push(r) } } label: { serviceTile(s) }
-                        .buttonStyle(ServiceTileStyle())
-                        .accessibilityLabel(s.route == nil ? "\(s.id), coming soon" : s.id)
+                    Button { if let r = s.route { open(r) } } label: {
+                        serviceTile(s).splitSelection(isSplit && s.route == detail, radius: Theme.cardRadius)
+                    }
+                    .buttonStyle(ServiceTileStyle())
+                    .accessibilityLabel(s.route == nil ? "\(s.id), coming soon" : s.id)
                 }
             }
         }
@@ -280,8 +310,9 @@ struct LandingView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Self.offerSpacing) {
                     ForEach(offers) { o in
-                        Button { app.push(.hotelRooms(o.id)) } label: {
+                        Button { open(.hotelRooms(o.id)) } label: {
                             offerCard(o)
+                                .splitSelection(isSplit && detail == .hotelRooms(o.id))
                         }
                         .buttonStyle(.plain)
                     }
@@ -344,7 +375,7 @@ struct LandingView: View {
     private var myPlans: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionTitle(text: "Trips")
-            Button { app.push(.itinerary) } label: {
+            Button { open(.itinerary) } label: {
                 // Live trip: same layout as `TripCard`, with booking status dots.
                 HStack(spacing: 14) {
                     FillPhoto(name: "HotelCaribbean", width: 72, height: 72)
@@ -362,16 +393,19 @@ struct LandingView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(Theme.cardPadding).card()
+                .splitSelection(isSplit && detail == .itinerary)
             }
             .buttonStyle(.plain)
 
             // Later trips, then a link to completed ones.
             ForEach(Sample.upcomingTrips) { t in
-                Button { app.push(.trip(t.id)) } label: { TripCard(trip: t) }
-                    .buttonStyle(.plain)
+                Button { open(.trip(t.id)) } label: {
+                    TripCard(trip: t).splitSelection(isSplit && detail == .trip(t.id))
+                }
+                .buttonStyle(.plain)
             }
             if !Sample.pastTrips.isEmpty {
-                Button { app.push(.pastTrips) } label: {
+                Button { open(.pastTrips) } label: {
                     HStack {
                         Label("Past trips", systemImage: "clock.arrow.circlepath").labelStyle(IconLabelStyle())
                         Spacer()

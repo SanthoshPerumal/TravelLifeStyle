@@ -155,7 +155,7 @@ struct LifestyleTravelApp: App {
             NavigationStack(path: $app.path) {
                 RootView()
                     .navigationDestination(for: Route.self) { route in
-                        destination(for: route)
+                        RouteView(route: route)
                     }
             }
             .environmentObject(app)
@@ -164,10 +164,14 @@ struct LifestyleTravelApp: App {
             .preferredColorScheme(.light)   // light mode only (per design brief)
         }
     }
+}
 
-    /// Maps a Route to its screen.
-    @ViewBuilder
-    private func destination(for route: Route) -> some View {
+/// Maps a Route to its screen. Used by the navigation stack and by the
+/// landing page's secondary column on wide layouts.
+struct RouteView: View {
+    let route: Route
+
+    var body: some View {
         switch route {
         case .fargo:            FargoView()
         case .inspire:          InspireView()

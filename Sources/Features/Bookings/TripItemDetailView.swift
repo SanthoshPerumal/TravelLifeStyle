@@ -35,7 +35,7 @@ struct TripItemDetailView: View {
             Spacer()
             StatusTag(confirmed: summary.confirmed)
         }
-        .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+        .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
     }
 
     // MARK: Flight
@@ -50,7 +50,7 @@ struct TripItemDetailView: View {
             KeyValueRow(key: "Gate", value: "22B")
             KeyValueRow(key: "Cabin", value: "Main Cabin", bold: true)
         }
-        .padding(18).card()
+        .padding(Theme.cardPadding).card()
 
         VStack(spacing: 12) {
             Image(systemName: "qrcode").font(.system(size: 96)).foregroundStyle(Theme.textPrimary)
@@ -77,7 +77,7 @@ struct TripItemDetailView: View {
                 KeyValueRow(key: "Card", value: Money.usd(app.hotelCash))
                 KeyValueRow(key: "Total", value: Money.usd(app.hotelTotal), bold: true)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
         } else {
             notBooked("No hotel booked for this trip yet.", action: "Find a hotel") { app.push(.hotelResults) }
         }
@@ -97,7 +97,7 @@ struct TripItemDetailView: View {
                 KeyValueRow(key: "Points", value: Money.pts(app.diningPointsUsed))
                 KeyValueRow(key: "Deposit", value: Money.usd(app.diningDeposit), bold: true)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
         } else {
             notBooked("No table reserved at \(Sample.restaurant.name) yet.", action: "Reserve a table") {
                 app.push(.diningRestaurant)
@@ -110,6 +110,6 @@ struct TripItemDetailView: View {
             Text(message).font(.ltBody).foregroundStyle(Theme.textBody)
             PillButton(title: action, action: perform)
         }
-        .padding(18).card()
+        .padding(Theme.cardPadding).card()
     }
 }

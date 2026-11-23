@@ -57,19 +57,26 @@ struct AppTabBar: View {
 
 /// The root of the navigation stack: the selected tab's screen with the tab bar.
 /// Screens pushed on top (bookings flows, details) cover it, so the tab bar only
-/// appears on the four root screens.
+/// appears on the four root screens. On wide layouts (iPhone Duo open, iPad) the
+/// landing page stays as the primary column and shows the selected tab's screen
+/// beside it, with the tab bar under the landing column.
 struct RootView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
-        Group {
-            switch app.tab {
-            case .home:     LandingView()
-            case .explore:  ExploreView()
-            case .bookings: BookingsView()
-            case .profile:  PreferencesView()
+        if sizeClass == .regular {
+            LandingView()
+        } else {
+            Group {
+                switch app.tab {
+                case .home:     LandingView()
+                case .explore:  ExploreView()
+                case .bookings: BookingsView()
+                case .profile:  PreferencesView()
+                }
             }
+            .safeAreaInset(edge: .bottom) { AppTabBar() }
         }
-        .safeAreaInset(edge: .bottom) { AppTabBar() }
     }
 }

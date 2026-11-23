@@ -32,7 +32,7 @@ struct BookingsView: View {
         let summary = TripItemSummary(item: item, app: app)
         return HStack(spacing: 14) {
             Image(systemName: item.icon)
-                .font(.system(size: 18, weight: .semibold)).foregroundStyle(Theme.red)
+                .font(.headline).foregroundStyle(Theme.red)
                 .frame(width: 44, height: 44)
                 .background(Theme.redSoft, in: Circle())
             VStack(alignment: .leading, spacing: 4) {

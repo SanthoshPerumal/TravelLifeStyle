@@ -48,6 +48,8 @@ final class AppState: ObservableObject {
     // Preferences (auto-saved: simply published state)
     @Published var selected: Set<String> = ["Hyatt", "United", "Italian"]
     @Published var priceLevel = 2
+    @Published var seatPreference = "Aisle"
+    @Published var roomPreference = "High floor"
 
     // Derived values --------------------------------------------------------
 

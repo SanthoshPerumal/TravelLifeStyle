@@ -228,3 +228,34 @@ struct RatingView: View {
         .accessibilityLabel(String(format: "Rated %.1f", rating) + (reviews.map { ", \($0) reviews" } ?? ""))
     }
 }
+
+/// Carousel page indicator: one dot per item, the current one drawn as a
+/// wider capsule. Tapping a dot jumps to that item.
+struct PageIndicator: View {
+    let count: Int
+    let current: Int
+    var onSelect: (Int) -> Void = { _ in }
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(0..<count, id: \.self) { i in
+                Capsule()
+                    .fill(i == current ? Theme.textPrimary : Theme.textSecondary.opacity(0.35))
+                    .frame(width: i == current ? 18 : 7, height: 7)
+                    .padding(.vertical, 8)                 // larger tap target
+                    .contentShape(Rectangle())
+                    .onTapGesture { onSelect(i) }
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: current)
+        .accessibilityElement()
+        .accessibilityLabel("Offer \(current + 1) of \(count)")
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: if current < count - 1 { onSelect(current + 1) }
+            case .decrement: if current > 0 { onSelect(current - 1) }
+            @unknown default: break
+            }
+        }
+    }
+}

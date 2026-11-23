@@ -18,6 +18,10 @@ struct LandingView: View {
         Service("Book experience", "ticket.fill", nil)
     ]
 
+    /// Offers carousel position (drives the page indicator and dot taps).
+    @State private var offerScroll = ScrollPosition(idType: String.self)
+    @State private var offerIndex = 0
+
     /// Hotels with a current offer, for the "Latest hotel offers" carousel.
     private var offers: [Hotel] { Sample.hotels.filter { $0.percentOff > 0 } }
 
@@ -237,7 +241,7 @@ struct LandingView: View {
         VStack(alignment: .leading, spacing: 4) {
             SectionTitle(text: "Latest hotel offers")
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
+                HStack(spacing: Self.offerSpacing) {
                     ForEach(offers) { o in
                         Button { app.push(.hotelRooms(o.id)) } label: {
                             offerCard(o)
@@ -245,15 +249,35 @@ struct LandingView: View {
                         .buttonStyle(.plain)
                     }
                 }
+                .scrollTargetLayout()
                 .padding(.vertical, 12)   // room for the card shadows
             }
             .scrollClipDisabled()
+            .scrollTargetBehavior(.viewAligned)   // swipes settle on a card
+            .scrollPosition($offerScroll)
+            // Which card is current: by offset, and the last one once scrolled to the end.
+            .onScrollGeometryChange(for: Int.self) { geo in
+                let maxX = geo.contentSize.width - geo.containerSize.width
+                if geo.contentOffset.x >= maxX - 4 { return offers.count - 1 }
+                let step = Self.offerWidth + Self.offerSpacing
+                return min(max(Int((geo.contentOffset.x / step).rounded()), 0), offers.count - 1)
+            } action: { _, index in
+                offerIndex = index
+            }
+
+            PageIndicator(count: offers.count, current: offerIndex) { i in
+                withAnimation { offerScroll.scrollTo(id: offers[i].id, anchor: .leading) }
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 
+    private static let offerWidth: CGFloat = 260
+    private static let offerSpacing: CGFloat = 16
+
     private func offerCard(_ o: Hotel) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HotelPhoto(hotel: o, width: 260, height: 160)
+            HotelPhoto(hotel: o, width: Self.offerWidth, height: 160)
             VStack(alignment: .leading, spacing: 6) {
                 Text(o.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary).lineLimit(1)
                 HStack(spacing: 4) {
@@ -271,7 +295,7 @@ struct LandingView: View {
             }
             .padding(16)
         }
-        .frame(width: 260, alignment: .leading)
+        .frame(width: Self.offerWidth, alignment: .leading)
         .card()
         .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
         .accessibilityElement(children: .combine)

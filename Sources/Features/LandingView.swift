@@ -64,9 +64,18 @@ struct LandingView: View {
 
     private var header: some View {
         HStack {
-            Text("LIFESTYLE").font(.system(size: 13, weight: .bold)).tracking(2)
-                .padding(.horizontal, 14).frame(height: 44)
-                .glass(in: Capsule())
+            HStack(spacing: 10) {
+                Image("WellsFargoLogo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .accessibilityLabel("Wells Fargo")
+                Text("Travel LifeStyle")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+            }
             Spacer()
             Text("\(app.points.formatted())")
                 .font(.system(size: 14, weight: .semibold))

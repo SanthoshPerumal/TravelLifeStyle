@@ -30,7 +30,7 @@ struct Screen<Content: View>: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) { content() }
-                .padding(.horizontal, Theme.screenPadding)
+                .readableColumn()
                 .padding(.bottom, 32)
         }
         .background(Theme.background.ignoresSafeArea())
@@ -94,8 +94,35 @@ struct StickyBar<Content: View>: View {
         HStack(spacing: 14) { content() }
             .padding(14)
             .glass(in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .frame(maxWidth: Theme.readableWidth + 8)    // lines up with the content column
             .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.bottom, 8)
+    }
+}
+
+// MARK: - Wide-screen layout helpers
+
+extension View {
+    /// The page's content column: screen padding, capped at `Theme.readableWidth`
+    /// and leading-aligned under the large title on wide screens.
+    func readableColumn() -> some View {
+        frame(maxWidth: Theme.readableWidth, alignment: .leading)
+            .padding(.horizontal, Theme.screenPadding)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// For horizontal scroll rows inside the content column: cards and shadows may
+    /// draw into the screen padding, but never past it. That keeps them out of the
+    /// camera / status column on the iPhone Duo's outer screen and out of the
+    /// neighbouring pane in a two-pane layout.
+    func bleedsIntoPadding() -> some View {
+        scrollClipDisabled()
+            .mask {
+                Rectangle()
+                    .padding(.horizontal, -Theme.screenPadding)
+                    .padding(.vertical, -24)
+            }
     }
 }
 

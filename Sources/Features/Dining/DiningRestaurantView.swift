@@ -216,14 +216,14 @@ struct DiningMenuView: View {
                             }
                             .padding(.vertical, 10)
                         }
-                        .scrollClipDisabled()
+                        .bleedsIntoPadding()
                         .background(Theme.background)
                     }
 
                     Text("Prices in USD before tax and gratuity. Menu changes with the season.")
                         .font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
-                .padding(.horizontal, Theme.screenPadding)
+                .readableColumn()
                 .padding(.bottom, 32)
             }
         }

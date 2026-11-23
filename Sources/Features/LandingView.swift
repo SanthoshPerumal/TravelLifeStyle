@@ -47,10 +47,13 @@ struct LandingView: View {
                 .padding(.horizontal, Theme.screenPadding)
                 .padding(.top, 20)
                 .padding(.bottom, 24)
-                .background(
-                    Theme.background,
-                    in: UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28, style: .continuous)
-                )
+                .background {
+                    // Fills to the screen edges, so on the iPhone Duo's outer screen
+                    // the sheet also runs behind the camera / status column.
+                    UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28, style: .continuous)
+                        .fill(Theme.background)
+                        .ignoresSafeArea(edges: [.horizontal, .bottom])
+                }
             }
         }
         .background {
@@ -182,6 +185,7 @@ struct LandingView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass").foregroundStyle(Theme.textSecondary)
                     Text("Need help? Ask Concierge").foregroundStyle(Theme.textBody)
+                        .lineLimit(1).minimumScaleFactor(0.8)
                     Spacer()
                 }
                 .font(.body)
@@ -252,7 +256,7 @@ struct LandingView: View {
                 .scrollTargetLayout()
                 .padding(.vertical, 12)   // room for the card shadows
             }
-            .scrollClipDisabled()
+            .bleedsIntoPadding()
             .scrollTargetBehavior(.viewAligned)   // swipes settle on a card
             .scrollPosition($offerScroll)
             // Which card is current: by offset, and the last one once scrolled to the end.

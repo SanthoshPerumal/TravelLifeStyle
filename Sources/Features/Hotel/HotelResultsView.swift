@@ -62,7 +62,7 @@ struct HotelResultsView: View {
                     }
                 }
             }
-            .scrollClipDisabled()
+            .bleedsIntoPadding()
 
             // Segmented sort control
             Picker("Sort", selection: $sort) {
@@ -77,12 +77,15 @@ struct HotelResultsView: View {
                 emptyState
             }
 
-            ForEach(results) { h in
-                Button {
-                    app.hotel = h
-                    app.push(.hotelRooms(h.id))
-                } label: { row(h) }
-                .buttonStyle(.plain)
+            // One column on phones, two side by side on wide screens.
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 16, alignment: .top)], spacing: 16) {
+                ForEach(results) { h in
+                    Button {
+                        app.hotel = h
+                        app.push(.hotelRooms(h.id))
+                    } label: { row(h) }
+                    .buttonStyle(.plain)
+                }
             }
         }
         .sheet(isPresented: $showFilters) {

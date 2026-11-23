@@ -60,6 +60,9 @@ enum Theme {
 
     // Layout
     static let screenPadding: CGFloat = 20
+    /// Widest a page's content column grows on wide screens (iPhone Duo open,
+    /// iPad) so text lines and photos keep phone-like proportions.
+    static let readableWidth: CGFloat = 720
     static let cardRadius: CGFloat = 22
     static let pillRadius: CGFloat = 26
 

@@ -24,7 +24,7 @@ struct CardCarousel<Item: Identifiable, Content: View>: View where Item.ID: Send
                 .scrollTargetLayout()
                 .padding(.vertical, 12)   // room for the card shadows
             }
-            .scrollClipDisabled()
+            .bleedsIntoPadding()
             .scrollTargetBehavior(.viewAligned)
             .scrollPosition($position)
             // Current card: by offset, and the last one once scrolled to the end.

@@ -56,7 +56,7 @@ struct DiningResultsView: View {
                     }
                 }
             }
-            .scrollClipDisabled()
+            .bleedsIntoPadding()
 
             Picker("Sort", selection: $sort) {
                 ForEach(Sort.allCases, id: \.self) { Text($0.rawValue).tag($0) }
@@ -68,7 +68,10 @@ struct DiningResultsView: View {
 
             if results.isEmpty { emptyState }
 
-            ForEach(results) { r in card(r) }
+            // One column on phones, two side by side on wide screens.
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 16, alignment: .top)], spacing: 16) {
+                ForEach(results) { r in card(r) }
+            }
         }
         .sheet(isPresented: $showFilters) {
             DiningFiltersSheet(filters: $app.diningFilters, restaurants: restaurantsHere)
@@ -168,7 +171,7 @@ struct DiningResultsView: View {
                             }
                         }
                     }
-                    .scrollClipDisabled()
+                    .bleedsIntoPadding()
                 }
             }
             .padding(16)

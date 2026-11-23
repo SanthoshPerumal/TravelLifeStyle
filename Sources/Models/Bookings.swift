@@ -59,7 +59,8 @@ struct Booking: Identifiable, Hashable {
     var facts: [(String, String)] = []
 
     /// Past once it has ended (or started, if it has no end).
-    var isPast: Bool { (end ?? start) < Date.now }
+    var isPast: Bool { isPast(at: .now) }
+    func isPast(at now: Date) -> Bool { (end ?? start) < now }
     var status: BookingStatus { cancelled ? .cancelled : isPast ? .completed : .confirmed }
 
     /// "Feb 12 – 15, 2027" or "Feb 13, 2027".
@@ -79,6 +80,8 @@ struct Trip: Identifiable, Hashable {
     let bookings: [Booking]
 
     var isPast: Bool { end < Date.now }
+    /// Started but not yet over.
+    var isInProgress: Bool { (start...end).contains(Date.now) }
     var datesText: String { Self.rangeText(start, end) }
     /// "3 bookings · Flight, Hotel stay, Dinner"
     var summary: String {
@@ -197,8 +200,29 @@ extension Sample {
     static var upcomingTrips: [Trip] { trips.filter { !$0.isPast }.sorted { $0.start < $1.start } }
     static var pastTrips: [Trip] { trips.filter(\.isPast).sorted { $0.start > $1.start } }
 
+    /// Bookings tab: each trip's reservations split by date. A booking is
+    /// upcoming until it ends (cancelled ones follow their date), so a trip that
+    /// is under way shows its remaining bookings under Upcoming and the ones
+    /// already done under Past. Upcoming runs soonest first; Past newest first.
+    static func bookingGroups(_ trips: [Trip], past: Bool, now: Date = .now) -> [BookingGroup] {
+        trips.compactMap { trip -> BookingGroup? in
+            let list = trip.bookings
+                .filter { $0.isPast(at: now) == past }
+                .sorted { $0.start < $1.start }
+            return list.isEmpty ? nil : BookingGroup(trip: trip, bookings: list)
+        }
+        .sorted { past ? $0.trip.start > $1.trip.start : $0.trip.start < $1.trip.start }
+    }
+
     static var allBookings: [Booking] { trips.flatMap(\.bookings) }
     static func trip(_ id: String) -> Trip? { trips.first { $0.id == id } }
     static func booking(_ id: String) -> Booking? { allBookings.first { $0.id == id } }
     static func trip(containing booking: Booking) -> Trip? { trips.first { $0.bookings.contains(booking) } }
+}
+
+/// One trip's bookings in the Upcoming or Past list.
+struct BookingGroup: Identifiable {
+    let trip: Trip
+    let bookings: [Booking]
+    var id: String { trip.id }
 }

@@ -368,7 +368,7 @@ struct LandingView: View {
         HStack {
             tabItem("house", "Home", active: true) {}
             tabItem("safari", "Explore", active: false) { app.push(.concierge) }
-            tabItem("suitcase", "Bookings", active: false) { app.push(.itinerary) }
+            tabItem("suitcase", "Bookings", active: false) { app.push(.bookings) }
             tabItem("person", "Profile", active: false) { app.push(.preferences) }
         }
         .padding(.horizontal, 10).padding(.vertical, 8)

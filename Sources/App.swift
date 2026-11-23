@@ -9,7 +9,7 @@ enum Route: Hashable {
     case concierge, inspire, itinerary, preferences
     case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
     case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
-    case trip(String), booking(String), pastTrips
+    case trip(String), booking(String), pastTrips, bookings
     case events, eventDetail(String), eventSeats(String), eventCheckout, eventConfirmed(String), myTickets, eventTickets(String)
 }
 
@@ -189,6 +189,7 @@ struct LifestyleTravelApp: App {
         case .trip(let id):     TripDetailView(tripID: id)
         case .booking(let id):  BookingDetailView(bookingID: id)
         case .pastTrips:        PastTripsView()
+        case .bookings:         BookingsView()
         case .events:           EventsDiscoverView()
         case .eventDetail(let id): EventDetailView(eventID: id)
         case .eventSeats(let id):  SeatMapView(eventID: id)

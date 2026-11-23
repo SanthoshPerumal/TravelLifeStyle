@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Day 1 – Landing page: balance, "Book now" grid, explore tabs, plans, tab bar.
+/// Day 1 – Landing page: balance, "Travel, dining & experiences" grid, explore tabs, plans, tab bar.
 struct LandingView: View {
     @EnvironmentObject var app: AppState
 
@@ -8,7 +8,7 @@ struct LandingView: View {
     @State private var tab = "Travel"
     private let tabs = ["Travel", "Entertainment", "Dining", "Exclusives"]
 
-    /// One tile in the "Book now" grid. `route == nil` means "not in this release".
+    /// One tile in the "Travel, dining & experiences" grid. `route == nil` means "not in this release".
     private struct Service: Identifiable {
         let id: String; let icon: String; let route: Route?
         init(_ id: String, _ icon: String, _ route: Route?) { self.id = id; self.icon = icon; self.route = route }
@@ -213,7 +213,7 @@ struct LandingView: View {
 
     private var bookNow: some View {
         VStack(alignment: .leading, spacing: 14) {
-            SectionTitle(text: "Book now")
+            SectionTitle(text: "Travel, dining & experiences")
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
                 ForEach(services) { s in
                     Button { if let r = s.route { app.push(r) } } label: {

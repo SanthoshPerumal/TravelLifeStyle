@@ -23,7 +23,7 @@ extension Color {
 enum Theme {
 
     // Brand
-    static let red        = Color(hex: 0xBA0721)   // errors & notification badges only ("Red 00")
+    static let red        = Color(hex: 0xBA0721)   // errors, badges & the active tab only ("Red 00")
     static let redSoft    = Color(hex: 0xFFE7E7)   // tinted backgrounds ("Red 7")
     static let gold       = Color(hex: 0xFFB200)   // accent dot / highlights
     static let goldSoft   = Color(hex: 0xF6E7C8)   // badge background

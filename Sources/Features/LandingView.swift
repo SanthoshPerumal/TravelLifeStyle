@@ -351,7 +351,7 @@ struct LandingView: View {
                 Image(systemName: active ? icon + ".fill" : icon).font(.title3)
                 Text(label).font(.caption2.weight(.medium))
             }
-            .foregroundStyle(active ? Theme.button : Theme.textSecondary)
+            .foregroundStyle(active ? Theme.red : Theme.textSecondary)
             .frame(maxWidth: .infinity)
         }
         .buttonStyle(.plain)

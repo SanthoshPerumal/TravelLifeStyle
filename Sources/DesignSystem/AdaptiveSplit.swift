@@ -63,6 +63,6 @@ extension View {
     /// Red outline marking the row whose details fill the secondary column.
     func splitSelection(_ selected: Bool, radius: CGFloat = Theme.cardRadius) -> some View {
         overlay(RoundedRectangle(cornerRadius: radius, style: .continuous)
-            .stroke(selected ? Theme.red : .clear, lineWidth: 2))
+            .stroke(selected ? Theme.button : .clear, lineWidth: 2))
     }
 }

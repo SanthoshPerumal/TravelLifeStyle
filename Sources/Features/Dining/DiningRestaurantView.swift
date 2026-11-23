@@ -42,16 +42,13 @@ struct DiningRestaurantView: View {
                     .disabled(!s.fits(app.dining.party))
             }
 
-            SectionTitle(text: "Popular dishes")
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(r.popularItems) { item in
-                        Button { dish = item } label: { dishCard(item) }
-                            .buttonStyle(.plain)
-                    }
+            VStack(alignment: .leading, spacing: 4) {
+                SectionTitle(text: "Popular dishes")
+                CardCarousel(items: r.popularItems, itemWidth: Self.dishWidth, spacing: 12, itemLabel: "Dish") { item in
+                    Button { dish = item } label: { dishCard(item) }
+                        .buttonStyle(.plain)
                 }
             }
-            .scrollClipDisabled()
             PillButton(title: "View full menu", kind: .secondary) { app.push(.diningMenu) }
 
             SectionTitle(text: "Amenities")
@@ -149,16 +146,18 @@ struct DiningRestaurantView: View {
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
+    private static let dishWidth: CGFloat = 170
+
     private func dishCard(_ item: MenuItem) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            FillPhoto(name: item.photo, width: 170, height: 120)
+            FillPhoto(name: item.photo, width: Self.dishWidth, height: 120)
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.name).font(.subheadline.weight(.semibold)).foregroundStyle(Theme.textPrimary).lineLimit(1)
                 Text(Money.usd(item.price)).font(.ltCaption).foregroundStyle(Theme.textBody)
             }
             .padding(12)
         }
-        .frame(width: 170, alignment: .leading)
+        .frame(width: Self.dishWidth, alignment: .leading)
         .card(radius: 18)
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityElement(children: .combine)

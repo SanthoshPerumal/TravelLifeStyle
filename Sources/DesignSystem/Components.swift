@@ -248,6 +248,8 @@ struct RatingView: View {
 struct PageIndicator: View {
     let count: Int
     let current: Int
+    /// VoiceOver name for one item ("Offer 2 of 5").
+    var label = "Offer"
     var onSelect: (Int) -> Void = { _ in }
 
     var body: some View {
@@ -263,7 +265,7 @@ struct PageIndicator: View {
         }
         .animation(.easeInOut(duration: 0.2), value: current)
         .accessibilityElement()
-        .accessibilityLabel("Offer \(current + 1) of \(count)")
+        .accessibilityLabel("\(label) \(current + 1) of \(count)")
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: if current < count - 1 { onSelect(current + 1) }

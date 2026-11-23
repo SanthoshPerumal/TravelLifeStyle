@@ -35,22 +35,17 @@ struct DiningSearchView: View {
                 }
             }
 
-            SectionTitle(text: "Popular in Houston")
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 14) {
-                    ForEach(Sample.restaurants) { r in
-                        Button {
-                            app.restaurant = r
-                            app.slot = nil
-                            app.push(.diningRestaurant)
-                        } label: { featured(r) }
-                        .buttonStyle(.plain)
-                    }
+            VStack(alignment: .leading, spacing: 4) {
+                SectionTitle(text: "Popular in Houston")
+                CardCarousel(items: Sample.restaurants, itemWidth: Self.featuredWidth, itemLabel: "Restaurant") { r in
+                    Button {
+                        app.restaurant = r
+                        app.slot = nil
+                        app.push(.diningRestaurant)
+                    } label: { featured(r) }
+                    .buttonStyle(.plain)
                 }
-                .scrollTargetLayout()
             }
-            .scrollTargetBehavior(.viewAligned)
-            .scrollClipDisabled()
         }
         .sheet(item: $editing) { field in
             switch field {
@@ -68,9 +63,11 @@ struct DiningSearchView: View {
         }
     }
 
+    private static let featuredWidth: CGFloat = 260
+
     private func featured(_ r: Restaurant) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            FillPhoto(name: r.photo, width: 240, height: 140)
+            FillPhoto(name: r.photo, width: Self.featuredWidth, height: 150)
             VStack(alignment: .leading, spacing: 4) {
                 Text(r.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 RestaurantMeta(restaurant: r).font(.ltCaption)
@@ -78,7 +75,7 @@ struct DiningSearchView: View {
             }
             .padding(14)
         }
-        .frame(width: 240, alignment: .leading)
+        .frame(width: Self.featuredWidth, alignment: .leading)
         .card()
         .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
         .accessibilityElement(children: .combine)

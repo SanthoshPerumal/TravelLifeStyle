@@ -110,9 +110,9 @@ enum Sample {
 // MARK: - Money helpers
 
 enum Money {
-    /// Whole-dollar total for N nights including taxes (matches the design: 250 → $565).
-    static func total(nightly: Int) -> Int {
-        Int((Double(nightly * Sample.nights) * (1 + Sample.taxRate)).rounded())
+    /// Whole-dollar total for the stay including taxes (matches the design: 250 × 2 nights → $565).
+    static func total(nightly: Int, nights: Int = Sample.nights, rooms: Int = 1) -> Int {
+        Int((Double(nightly * nights * rooms) * (1 + Sample.taxRate)).rounded())
     }
     static func usd(_ v: Int) -> String { "$\(v.formatted())" }
     static func pts(_ v: Int) -> String { "\(v.formatted()) pts" }

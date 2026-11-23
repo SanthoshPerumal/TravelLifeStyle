@@ -11,7 +11,7 @@ struct LandingView: View {
     }
     private let services = [
         Service("Book flight", "airplane", nil),
-        Service("Book hotel", "building.2.fill", .hotelResults),
+        Service("Book hotel", "building.2.fill", .hotelSearch),
         Service("Book car", "car.fill", nil),
         Service("Reserve a table", "fork.knife", .diningRestaurant),
         Service("Book event", "theatermasks.fill", nil),

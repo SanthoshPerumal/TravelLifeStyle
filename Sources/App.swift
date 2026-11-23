@@ -7,7 +7,7 @@ import Combine
 /// keeps navigation type-safe and lets us jump back to Home in one line.
 enum Route: Hashable {
     case concierge, inspire, itinerary, preferences
-    case hotelResults, hotelRooms(String), hotelPay, hotelConfirm, hotelBooked
+    case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
     case diningRestaurant, diningTime, diningGuest, diningPay, diningConfirmed
 }
 
@@ -25,8 +25,12 @@ final class AppState: ObservableObject {
     @Published var points = 12_450
 
     // Hotel flow
+    @Published var search = HotelSearch.initial
+    @Published var filters = HotelFilters()
     @Published var hotel: Hotel = Sample.hotels[0]
     @Published var room: Room = Sample.rooms[1]           // Deluxe King
+    @Published var rate: RateOption = .flexible
+    @Published var guest = GuestDetails()
     @Published var hotelPointsUsed = 5_000
     @Published var hotelBooked = false
 
@@ -42,10 +46,14 @@ final class AppState: ObservableObject {
 
     // Derived values --------------------------------------------------------
 
-    /// Selected room's nightly rate after the hotel's current offer.
-    var roomNightly: Int { hotel.dealPrice(room.nightly) }
-    /// Hotel total after the offer and the +$5/night reprice the user accepted.
-    var hotelTotal: Int { Money.total(nightly: roomNightly + Sample.repricePerNight) }
+    /// Selected room's nightly rate after the hotel's offer and the chosen rate.
+    var roomNightly: Int { rate.price(hotel.dealPrice(room.nightly)) }
+    /// Stay total (all nights and rooms, incl. taxes) for a per-room nightly rate.
+    func stayTotal(nightly: Int) -> Int {
+        Money.total(nightly: nightly, nights: search.nights, rooms: search.roomCount)
+    }
+    /// Hotel total after the offer, rate and the +$5/night reprice the user accepted.
+    var hotelTotal: Int { stayTotal(nightly: roomNightly + Sample.repricePerNight) }
     /// Cash due after applying points (100 pts = $1).
     var hotelCash: Int { max(hotelTotal - hotelPointsUsed / Theme.pointsPerDollar, 0) }
     var diningDeposit: Int { 400 }
@@ -99,8 +107,10 @@ struct LifestyleTravelApp: App {
         case .inspire:          InspireView()
         case .itinerary:        ItineraryView()
         case .preferences:      PreferencesView()
+        case .hotelSearch:      HotelSearchView()
         case .hotelResults:     HotelResultsView()
         case .hotelRooms(let id): HotelRoomsView(hotelID: id)
+        case .hotelGuest:       HotelGuestView()
         case .hotelPay:         HotelPayView()
         case .hotelConfirm:     HotelConfirmView()
         case .hotelBooked:      HotelBookedView()

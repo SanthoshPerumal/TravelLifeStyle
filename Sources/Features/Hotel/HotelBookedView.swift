@@ -17,7 +17,9 @@ struct HotelBookedView: View {
                 KeyValueRow(key: "Booking", value: "ASP-90027415")
                 KeyValueRow(key: "Hotel", value: app.hotel.name)
                 KeyValueRow(key: "Room", value: app.room.name)
-                KeyValueRow(key: "Dates", value: Sample.dates)
+                KeyValueRow(key: "Dates", value: app.search.datesText)
+                KeyValueRow(key: "Guests", value: app.search.travelersText)
+                KeyValueRow(key: "Guest name", value: app.guest.fullName)
                 KeyValueRow(key: "Points balance", value: Money.pts(app.points), bold: true)
             }
             .padding(18).card()
@@ -26,7 +28,7 @@ struct HotelBookedView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Your trip").font(.ltHeadline)
                 Label("Flight LAX → IAH · Jan 1", systemImage: "airplane")
-                Label("\(app.hotel.name) · 2 nights", systemImage: "bed.double")
+                Label("\(app.hotel.name) · \(app.search.nightsText)", systemImage: "bed.double")
             }
             .font(.ltBody).foregroundStyle(Theme.textBody)
             .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()

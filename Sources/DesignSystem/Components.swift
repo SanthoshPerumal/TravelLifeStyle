@@ -189,6 +189,8 @@ struct HotelPhoto: View {
     let hotel: Hotel
     var width: CGFloat? = nil
     let height: CGFloat
+    /// Off for small thumbnails where the badge would cover the photo.
+    var showBadge = true
 
     var body: some View {
         Color.clear
@@ -197,7 +199,7 @@ struct HotelPhoto: View {
             .overlay { Image(hotel.photo).resizable().scaledToFill() }
             .clipped()
             .overlay(alignment: .topLeading) {
-                if hotel.percentOff > 0 {
+                if showBadge && hotel.percentOff > 0 {
                     Text("\(hotel.percentOff)% OFF")
                         .font(.caption.bold())
                         .foregroundStyle(.white)

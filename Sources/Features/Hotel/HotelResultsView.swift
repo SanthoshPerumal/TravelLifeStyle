@@ -1,18 +1,23 @@
 import SwiftUI
 
-/// Day 2 – Hotel search & results with filters and sorting.
+/// Hotel results for the current search, with filters and sorting.
 struct HotelResultsView: View {
     @EnvironmentObject var app: AppState
 
     enum Sort: String, CaseIterable { case recommended = "Recommended", price = "Price", rating = "Rating" }
 
     @State private var sort: Sort = .recommended
-    @State private var freeCancelOnly = false
+    @State private var showFilters = false
 
-    /// Applies the filter + sort to the sample list.
+    /// Quick filters shown as chips (the rest live in the filters sheet).
+    private let quickAmenities: [Amenity] = [.breakfast, .freeParking, .petFriendly, .pool]
+
+    /// Hotels at the destination, before filters.
+    private var hotelsHere: [Hotel] { Sample.hotels(for: app.search.destination) }
+
+    /// Applies the filters + sort to the hotels at the destination.
     private var results: [Hotel] {
-        var list = Sample.hotels
-        if freeCancelOnly { list = list.filter { $0.freeCancel } }
+        var list = hotelsHere.filter(app.filters.matches)
         switch sort {
         case .recommended: break
         case .price:  list.sort { $0.dealNightly < $1.dealNightly }
@@ -23,25 +28,54 @@ struct HotelResultsView: View {
 
     var body: some View {
         Screen(title: "Hotels") {
-            // Search summary card
-            VStack(alignment: .leading, spacing: 6) {
-                Text(Sample.city).font(.ltHeadline)
-                Text("\(Sample.dates) · \(Sample.guests) guests").font(.ltBody).foregroundStyle(Theme.textBody)
+            // Search summary – tap to change the search
+            Button(action: editSearch) {
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(app.search.destination?.name ?? "All Houston hotels").font(.ltHeadline)
+                        Text("\(app.search.datesText) · \(app.search.travelersText)")
+                            .font(.ltCaption).foregroundStyle(Theme.textBody)
+                    }
+                    Spacer()
+                    Text("Edit").font(.ltCaptionBold).foregroundStyle(Theme.textPrimary)
+                        .padding(.horizontal, 12).padding(.vertical, 6)
+                        .overlay(Capsule().stroke(Theme.hairline, lineWidth: 1))
+                }
+                .foregroundStyle(Theme.textPrimary)
+                .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .buttonStyle(.plain)
+            .accessibilityHint("Change destination, dates or travelers")
 
             // Filters – wrapped in a scroll view so every chip stays reachable.
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    Chip(title: "Free cancellation", selected: freeCancelOnly, tint: Theme.success) { freeCancelOnly.toggle() }
+                    filtersButton
+                    Chip(title: "Free cancellation", selected: app.filters.freeCancellation, tint: Theme.success) {
+                        app.filters.freeCancellation.toggle()
+                    }
+                    ForEach(quickAmenities) { a in
+                        Chip(title: a.chipTitle, selected: app.filters.amenities.contains(a)) {
+                            if app.filters.amenities.contains(a) { app.filters.amenities.remove(a) }
+                            else { app.filters.amenities.insert(a) }
+                        }
+                    }
                 }
             }
+            .scrollClipDisabled()
 
             // Segmented sort control
             Picker("Sort", selection: $sort) {
                 ForEach(Sort.allCases, id: \.self) { Text($0.rawValue).tag($0) }
             }
             .pickerStyle(.segmented)
+
+            Text(results.count == 1 ? "1 hotel" : "\(results.count) hotels")
+                .font(.ltCaption).foregroundStyle(Theme.textSecondary)
+
+            if results.isEmpty {
+                emptyState
+            }
 
             ForEach(results) { h in
                 Button {
@@ -50,6 +84,57 @@ struct HotelResultsView: View {
                 } label: { row(h) }
                 .buttonStyle(.plain)
             }
+        }
+        .sheet(isPresented: $showFilters) {
+            HotelFiltersSheet(filters: $app.filters, hotels: hotelsHere)
+        }
+    }
+
+    private var filtersButton: some View {
+        Button { showFilters = true } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "line.3.horizontal.decrease")
+                Text("Filters")
+                if app.filters.activeCount > 0 {
+                    Text("\(app.filters.activeCount)")
+                        .font(.caption2.bold()).foregroundStyle(.white)
+                        .frame(minWidth: 18, minHeight: 18)
+                        .background(Theme.textPrimary, in: Circle())
+                }
+            }
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(Theme.textPrimary)
+            .padding(.horizontal, 14).padding(.vertical, 9)
+            .background(Color.white, in: Capsule())
+            .overlay(Capsule().stroke(Theme.textSecondary.opacity(0.5), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(app.filters.activeCount > 0 ? "Filters, \(app.filters.activeCount) applied" : "Filters")
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "magnifyingglass").font(.title).foregroundStyle(Theme.icon)
+            Text(hotelsHere.isEmpty ? "No hotels here yet" : "No hotels match your filters").font(.ltHeadline)
+            Text(hotelsHere.isEmpty
+                 ? "We don't have hotels for \(app.search.destination?.name ?? "this search") yet. Try a Houston neighborhood or landmark."
+                 : "Try removing a filter or two.")
+                .font(.ltBody).foregroundStyle(Theme.textBody).multilineTextAlignment(.center)
+            if hotelsHere.isEmpty {
+                Button("Change search", action: editSearch).font(.ltHeadline).foregroundStyle(Theme.red)
+            } else {
+                Button("Clear filters") { app.filters = HotelFilters() }.font(.ltHeadline).foregroundStyle(Theme.red)
+            }
+        }
+        .frame(maxWidth: .infinity).padding(24).card()
+    }
+
+    /// Back to the search form (pops to it if it's on the stack).
+    private func editSearch() {
+        if let i = app.path.lastIndex(of: .hotelSearch) {
+            app.path.removeSubrange((i + 1)...)
+        } else {
+            app.push(.hotelSearch)
         }
     }
 
@@ -67,6 +152,13 @@ struct HotelResultsView: View {
                     if h.freeCancel {
                         Text("Free cancellation").font(.ltCaptionBold).foregroundStyle(Theme.success)
                     }
+                    HStack(spacing: 10) {
+                        ForEach(h.amenityList.prefix(5)) { a in
+                            Image(systemName: a.icon).accessibilityLabel(a.title)
+                        }
+                    }
+                    .font(.footnote).foregroundStyle(Theme.textSecondary)
+                    .padding(.top, 2)
                 }
                 Spacer()
                 VStack(alignment: .trailing) {

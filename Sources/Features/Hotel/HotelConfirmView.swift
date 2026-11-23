@@ -8,10 +8,20 @@ struct HotelConfirmView: View {
 
     var body: some View {
         Screen(title: "Complete booking") {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(app.hotel.name).font(.ltHeadline)
-                Text("\(app.room.name) · \(Sample.dates)").font(.ltBody).foregroundStyle(Theme.textBody)
-                Text("\(Sample.guests) guests").font(.ltCaption).foregroundStyle(Theme.textSecondary)
+            StaySummary()
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Guest").font(.ltHeadline)
+                KeyValueRow(key: "Name", value: app.guest.fullName)
+                KeyValueRow(key: "Email", value: app.guest.email)
+                if !app.guest.phone.isEmpty { KeyValueRow(key: "Phone", value: app.guest.phone) }
+                KeyValueRow(key: "Arrival", value: app.guest.arrival)
+                if !app.guest.requests.isEmpty {
+                    Text("“\(app.guest.requests)”").font(.ltCaption).foregroundStyle(Theme.textSecondary)
+                }
+                Text(app.rate == .flexible ? app.search.freeCancellationText : "Non-refundable – no refund if you cancel")
+                    .font(.ltCaptionBold)
+                    .foregroundStyle(app.rate == .flexible ? Theme.success : Theme.goldText)
             }
             .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
 

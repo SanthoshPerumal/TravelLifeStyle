@@ -29,20 +29,6 @@ struct Room: Identifiable, Hashable {
     let nightly: Int          // USD per night
 }
 
-struct TimeSlot: Identifiable, Hashable {
-    let id: String
-    let time: String
-    let tableSize: Int        // seats at the table
-    let tablesLeft: Int
-}
-
-struct Restaurant: Identifiable, Hashable {
-    let id: String
-    let name: String
-    let cuisine: String
-    let area: String
-}
-
 struct Suggestion: Identifiable, Hashable {
     let id: String
     let title: String
@@ -77,21 +63,9 @@ enum Sample {
         Room(id: "suite", name: "Junior Suite",   bed: "1 King bed + sofa", nightly: 340)
     ]
 
-    static let restaurant = Restaurant(id: "trattoria", name: "Trattoria Verde", cuisine: "Italian", area: "Montrose")
-
-    /// Sizes/tables match the design: a slot is SOLD OUT if party > tableSize.
-    static let slots: [TimeSlot] = [
-        TimeSlot(id: "t1", time: "6:00 PM", tableSize: 4, tablesLeft: 5),
-        TimeSlot(id: "t2", time: "6:30 PM", tableSize: 6, tablesLeft: 4),
-        TimeSlot(id: "t3", time: "7:00 PM", tableSize: 2, tablesLeft: 5),
-        TimeSlot(id: "t4", time: "7:30 PM", tableSize: 4, tablesLeft: 3),
-        TimeSlot(id: "t5", time: "8:00 PM", tableSize: 6, tablesLeft: 5),
-        TimeSlot(id: "t6", time: "8:30 PM", tableSize: 2, tablesLeft: 2)
-    ]
-
     static let hotelBrands  = ["Hyatt", "Marriott", "Hilton", "Four Seasons", "IHG"]
     static let airlines     = ["United", "Delta", "American", "ANA", "Southwest"]
-    static let venues       = ["Trattoria Verde", "Harbor & Vine", "Sol y Mar"]
+    static let venues       = ["Trattoria Verde", "Kuro Omakase", "Harbor & Vine", "Sol y Mar", "Prime 1836"]
     static let cuisines     = ["Italian", "Japanese", "Mexican", "Seafood", "Steakhouse"]
     static let dietary      = ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Nut allergy"]
 

@@ -13,7 +13,7 @@ struct LandingView: View {
         Service("Book flight", "airplane", nil),
         Service("Book hotel", "building.2.fill", .hotelSearch),
         Service("Book car", "car.fill", nil),
-        Service("Reserve a table", "fork.knife", .diningRestaurant),
+        Service("Reserve a table", "fork.knife", .diningSearch),
         Service("Book event", "theatermasks.fill", nil),
         Service("Book experience", "ticket.fill", nil)
     ]

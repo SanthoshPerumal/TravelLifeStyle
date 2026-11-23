@@ -8,7 +8,7 @@ import Combine
 enum Route: Hashable {
     case concierge, inspire, itinerary, preferences
     case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
-    case diningRestaurant, diningTime, diningGuest, diningPay, diningConfirmed
+    case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
 }
 
 // MARK: - Shared state
@@ -35,9 +35,13 @@ final class AppState: ObservableObject {
     @Published var hotelBooked = false
 
     // Dining flow
-    @Published var party = 4
-    @Published var slot: TimeSlot? = Sample.slots[4]       // 8:00 PM
-    @Published var diningPointsUsed = 4_000
+    @Published var dining = DiningSearch.initial
+    @Published var diningFilters = DiningFilters()
+    @Published var restaurant: Restaurant = Sample.restaurant
+    @Published var slot: TimeSlot?
+    @Published var seating: Seating = .any
+    @Published var diningRequests = DiningRequests()
+    @Published var diningPointsUsed = 0
     @Published var diningBooked = false
 
     // Preferences (auto-saved: simply published state)
@@ -56,7 +60,10 @@ final class AppState: ObservableObject {
     var hotelTotal: Int { stayTotal(nightly: roomNightly + Sample.repricePerNight) }
     /// Cash due after applying points (100 pts = $1).
     var hotelCash: Int { max(hotelTotal - hotelPointsUsed / Theme.pointsPerDollar, 0) }
-    var diningDeposit: Int { 400 }
+    /// Guests at the table.
+    var party: Int { dining.party }
+    /// Refundable deposit that holds the table (credited to the final bill).
+    var diningDeposit: Int { restaurant.depositPerGuest * dining.party }
     var diningCash: Int { max(diningDeposit - diningPointsUsed / Theme.pointsPerDollar, 0) }
 
     func toggle(_ key: String) {
@@ -114,10 +121,13 @@ struct LifestyleTravelApp: App {
         case .hotelPay:         HotelPayView()
         case .hotelConfirm:     HotelConfirmView()
         case .hotelBooked:      HotelBookedView()
+        case .diningSearch:     DiningSearchView()
+        case .diningResults:    DiningResultsView()
         case .diningRestaurant: DiningRestaurantView()
-        case .diningTime:       DiningTimeView()
+        case .diningMenu:       DiningMenuView()
         case .diningGuest:      DiningGuestView()
         case .diningPay:        DiningPayView()
+        case .diningReview:     DiningReviewView()
         case .diningConfirmed:  DiningConfirmedView()
         }
     }

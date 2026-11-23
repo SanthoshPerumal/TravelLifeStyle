@@ -58,8 +58,8 @@ struct ItineraryView: View {
             }
             timelineCard(icon: "bed.double", title: app.hotelBooked ? app.hotel.name : "Hotel check-in",
                          sub: "Check-in 3:00 PM") { EmptyView() }
-            timelineCard(icon: "fork.knife", title: Sample.restaurant.name,
-                         sub: "Dinner · \(app.slot?.time ?? "8:00 PM") · party of \(app.party)") { EmptyView() }
+            timelineCard(icon: "fork.knife", title: app.restaurant.name,
+                         sub: "Dinner · \(app.slot?.time ?? app.dining.timeText) · party of \(app.party)") { EmptyView() }
 
             // Display-only actions (POC). See README for the note on these.
             HStack {

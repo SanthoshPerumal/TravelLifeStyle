@@ -36,7 +36,7 @@ struct ConciergeView: View {
                 TextField("Message Concierge", text: $input).padding(.leading, 6)
                     .submitLabel(.send).onSubmit { send(input) }
                 Button { send(input) } label: {
-                    Image(systemName: "arrow.up.circle.fill").font(.title).foregroundStyle(Theme.red)
+                    Image(systemName: "arrow.up.circle.fill").font(.title).foregroundStyle(Theme.button)
                 }
             }
             .padding(10).glass(in: Capsule()).padding(Theme.screenPadding)
@@ -54,14 +54,14 @@ struct ConciergeView: View {
                 Text(m.text).font(.ltBody).foregroundStyle(m.fromUser ? .white : Theme.textPrimary)
                 if let r = m.route, let label = m.routeLabel {
                     Button { app.push(r) } label: {
-                        Text(label).font(.ltCaptionBold).foregroundStyle(Theme.red)
+                        Text(label).font(.ltCaptionBold).foregroundStyle(.white)
                             .padding(.horizontal, 12).padding(.vertical, 8)
-                            .background(Theme.redSoft, in: Capsule())
+                            .background(Theme.button, in: Capsule())
                     }
                 }
             }
             .padding(14)
-            .background(m.fromUser ? Theme.red : Color.white,
+            .background(m.fromUser ? Theme.button : Color.white,
                         in: RoundedRectangle(cornerRadius: 20, style: .continuous))
             if !m.fromUser { Spacer(minLength: 50) }
         }

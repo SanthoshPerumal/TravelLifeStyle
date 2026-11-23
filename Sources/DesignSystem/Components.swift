@@ -87,20 +87,20 @@ struct StickyBar<Content: View>: View {
 // MARK: - Chips & badges
 
 /// Selectable chip used for filters, cuisines, brands, etc.
+/// Selected chips use the primary button look (dark fill, white text).
 struct Chip: View {
     let title: String
     var selected: Bool = false
-    var tint: Color = Theme.red
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Text(title)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(selected ? tint : Theme.textBody)
+                .foregroundStyle(selected ? Color.white : Theme.textBody)
                 .padding(.horizontal, 14).padding(.vertical, 9)
-                .background(selected ? tint.opacity(0.10) : Color.white, in: Capsule())
-                .overlay(Capsule().stroke(selected ? tint : Theme.hairline, lineWidth: 1))
+                .background(selected ? Theme.button : Color.white, in: Capsule())
+                .overlay(Capsule().stroke(selected ? Theme.button : Theme.hairline, lineWidth: 1))
         }
         .buttonStyle(.plain)
     }

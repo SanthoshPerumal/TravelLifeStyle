@@ -19,7 +19,7 @@ struct HotelPayView: View {
                     .font(.ltHeadline).foregroundStyle(Theme.goldText)
                 Text("The total went from \(Money.usd(oldTotal)) to \(Money.usd(app.hotelTotal)).")
                     .font(.ltBody).foregroundStyle(Theme.textBody)
-                Toggle("I accept the new price", isOn: $accepted).tint(Theme.red)
+                Toggle("I accept the new price", isOn: $accepted).tint(Theme.button)
             }
             .padding(18).background(Theme.goldSoft.opacity(0.5),
                                     in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))

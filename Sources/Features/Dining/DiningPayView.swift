@@ -22,7 +22,7 @@ struct DiningPayView: View {
             Text("Free cancellation up to 48 hours before your reservation; after that the deposit is forfeited.")
                 .font(.ltCaption).foregroundStyle(Theme.textSecondary)
 
-            Toggle("I agree to the terms & conditions", isOn: $agreed).tint(Theme.red)
+            Toggle("I agree to the terms & conditions", isOn: $agreed).tint(Theme.button)
                 .font(.ltBody).padding(18).card()
         }
         .safeAreaInset(edge: .bottom) {

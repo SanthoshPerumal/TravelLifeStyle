@@ -51,7 +51,7 @@ struct HotelResultsView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     filtersButton
-                    Chip(title: "Free cancellation", selected: app.filters.freeCancellation, tint: Theme.success) {
+                    Chip(title: "Free cancellation", selected: app.filters.freeCancellation) {
                         app.filters.freeCancellation.toggle()
                     }
                     ForEach(quickAmenities) { a in

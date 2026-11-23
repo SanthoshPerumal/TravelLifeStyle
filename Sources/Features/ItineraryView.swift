@@ -35,7 +35,7 @@ struct ItineraryView: View {
                             Text(d).font(.ltHeadline)
                                 .frame(width: 48, height: 56)
                                 .foregroundStyle(selectedDay == d ? .white : Theme.textPrimary)
-                                .background(selectedDay == d ? Theme.red : Color.white,
+                                .background(selectedDay == d ? Theme.button : Color.white,
                                             in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
                                     .stroke(Theme.hairline, lineWidth: selectedDay == d ? 0 : 1))

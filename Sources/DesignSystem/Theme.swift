@@ -23,7 +23,7 @@ extension Color {
 enum Theme {
 
     // Brand
-    static let red        = Color(hex: 0xBA0721)   // primary action color ("Red 00")
+    static let red        = Color(hex: 0xBA0721)   // errors & notification badges only ("Red 00")
     static let redSoft    = Color(hex: 0xFFE7E7)   // tinted backgrounds ("Red 7")
     static let gold       = Color(hex: 0xFFB200)   // accent dot / highlights
     static let goldSoft   = Color(hex: 0xF6E7C8)   // badge background
@@ -39,7 +39,7 @@ enum Theme {
     static let headerTintTop    = Color(hex: 0xE4DBD1)   // warm tint behind the landing header
     static let headerTintBottom = Color(hex: 0xEFE9E3)
     /// Neutral tint for content icons (services grid, list icons). Red is kept
-    /// for actions and selection so it doesn't dominate the screen.
+    /// for errors and badges; buttons and selection use `button`.
     static let icon             = Color(hex: 0x3A3A3C)
     /// Dark scrim behind white text on photos (offer badges).
     static let photoBadge       = Color.black.opacity(0.68)

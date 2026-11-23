@@ -97,7 +97,7 @@ struct HotelRoomsView: View {
         let price = nightly(r, rates.contains(app.rate) ? app.rate : rates[0])
         return HStack(alignment: .top, spacing: 14) {
             Image(systemName: selected ? "largecircle.fill.circle" : "circle")
-                .foregroundStyle(selected ? Theme.red : Theme.textSecondary).font(.title2)
+                .foregroundStyle(selected ? Theme.button : Theme.textSecondary).font(.title2)
             VStack(alignment: .leading, spacing: 4) {
                 Text(r.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 Text("\(r.bed) · Sleeps \(r.maxGuests)").font(.ltCaption).foregroundStyle(Theme.textSecondary)
@@ -117,7 +117,7 @@ struct HotelRoomsView: View {
         .padding(16)
         .card()
         .overlay(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous)
-            .stroke(selected ? Theme.red : .clear, lineWidth: 1.5))
+            .stroke(selected ? Theme.button : .clear, lineWidth: 1.5))
         .opacity(fits(r) ? 1 : 0.5)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(selected ? .isSelected : [])
@@ -132,7 +132,7 @@ struct HotelRoomsView: View {
         }
         return HStack(alignment: .top, spacing: 14) {
             Image(systemName: selected ? "largecircle.fill.circle" : "circle")
-                .foregroundStyle(selected ? Theme.red : Theme.textSecondary).font(.title2)
+                .foregroundStyle(selected ? Theme.button : Theme.textSecondary).font(.title2)
             VStack(alignment: .leading, spacing: 4) {
                 Text(rate.title).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 Text(detail).font(.ltCaption)
@@ -144,7 +144,7 @@ struct HotelRoomsView: View {
         .padding(16)
         .card()
         .overlay(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous)
-            .stroke(selected ? Theme.red : .clear, lineWidth: 1.5))
+            .stroke(selected ? Theme.button : .clear, lineWidth: 1.5))
         .opacity(offered ? 1 : 0.5)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(selected ? .isSelected : [])

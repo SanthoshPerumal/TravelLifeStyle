@@ -37,7 +37,7 @@ struct DiningTimeView: View {
                         .foregroundStyle(ok ? Theme.textPrimary : Theme.textSecondary)
                         .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .stroke(app.slot?.id == s.id ? Theme.red : Theme.hairline, lineWidth: 1.5))
+                            .stroke(app.slot?.id == s.id ? Theme.button : Theme.hairline, lineWidth: 1.5))
                         .opacity(ok ? 1 : 0.55)
                     }
                     .buttonStyle(.plain)

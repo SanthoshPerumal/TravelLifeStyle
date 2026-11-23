@@ -34,7 +34,7 @@ struct HotelConfirmView: View {
             .padding(18).card()
 
             Toggle("I agree to the terms and cancellation policy", isOn: $agreed)
-                .tint(Theme.red).font(.ltBody).padding(18).card()
+                .tint(Theme.button).font(.ltBody).padding(18).card()
         }
         .safeAreaInset(edge: .bottom) {
             StickyBar {

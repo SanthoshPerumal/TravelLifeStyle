@@ -43,7 +43,7 @@ struct PreferencesView: View {
             }
 
             Button("Opt out of travel profile") {}
-                .font(.ltBody).foregroundStyle(Theme.red).padding(.top, 4)
+                .font(.ltBody).foregroundStyle(Theme.button).padding(.top, 4)
         }
     }
 
@@ -73,7 +73,7 @@ struct PreferencesView: View {
             Button {
                 let v = text.wrappedValue.trimmingCharacters(in: .whitespaces)
                 if !v.isEmpty { onAdd(v); text.wrappedValue = "" }
-            } label: { Image(systemName: "plus.circle.fill").foregroundStyle(Theme.red).font(.title2) }
+            } label: { Image(systemName: "plus.circle.fill").foregroundStyle(Theme.button).font(.title2) }
         }
         .padding(.horizontal, 18).padding(.vertical, 12).card()
     }

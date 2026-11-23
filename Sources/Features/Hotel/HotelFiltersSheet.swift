@@ -54,7 +54,7 @@ struct HotelFiltersSheet: View {
                     .listRowInsets(EdgeInsets())
                 }
             }
-            .tint(Theme.red)
+            .tint(Theme.button)
             .navigationTitle("Filters")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -74,7 +74,7 @@ struct HotelFiltersSheet: View {
                 .background(.bar)
             }
         }
-        .tint(Theme.red)
+        .tint(Theme.button)
     }
 
     /// Neutral icon + title (a Label would pick up the red list tint).

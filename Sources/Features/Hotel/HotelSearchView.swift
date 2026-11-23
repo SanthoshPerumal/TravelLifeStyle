@@ -122,7 +122,7 @@ struct DestinationPicker: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
             }
         }
-        .tint(Theme.red)
+        .tint(Theme.button)
     }
 
     private func destinationRow(_ d: Destination, title: String? = nil) -> some View {
@@ -138,7 +138,7 @@ struct DestinationPicker: View {
             }
             Spacer()
             if selection == d {
-                Image(systemName: "checkmark").foregroundStyle(Theme.red)
+                Image(systemName: "checkmark").foregroundStyle(Theme.button)
             }
         }
         .contentShape(Rectangle())
@@ -218,7 +218,7 @@ struct DateRangeSheet: View {
                                selection: selection, in: range, displayedComponents: .date)
                         .datePickerStyle(.graphical)
                         .labelsHidden()
-                        .tint(Theme.red)
+                        .tint(Theme.button)
                         .padding(8)
                         .card(radius: 20)
 
@@ -242,7 +242,7 @@ struct DateRangeSheet: View {
                 }
             }
         }
-        .tint(Theme.red)
+        .tint(Theme.button)
     }
 
     private func dateBox(_ title: String, _ date: Date, active: Bool, action: @escaping () -> Void) -> some View {
@@ -255,7 +255,7 @@ struct DateRangeSheet: View {
             .padding(14)
             .background(Theme.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(active ? Theme.red : Theme.hairline, lineWidth: active ? 2 : 1))
+                .stroke(active ? Theme.button : Theme.hairline, lineWidth: active ? 2 : 1))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(title), \(HotelSearch.dayText(date))")
@@ -340,7 +340,7 @@ struct TravelersSheet: View {
                     .background(.bar)
             }
         }
-        .tint(Theme.red)
+        .tint(Theme.button)
     }
 
     /// Children count backed by the ages array (new children default to age 5).

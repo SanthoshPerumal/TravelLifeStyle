@@ -43,19 +43,42 @@ struct LandingView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                header
-                titleBlock
-                balanceCard
-                conciergePill
-                bookNow
-                explore
-                myPlans
+            VStack(alignment: .leading, spacing: 0) {
+                // Tinted top section: header, greeting and concierge search.
+                VStack(alignment: .leading, spacing: 22) {
+                    header
+                    titleBlock
+                    conciergeSearch
+                }
+                .padding(.horizontal, Theme.screenPadding)
+                .padding(.bottom, 24)
+
+                // Content sheet that rises over the tinted top section.
+                VStack(alignment: .leading, spacing: 24) {
+                    balanceCard
+                    bookNow
+                    explore
+                    myPlans
+                }
+                .padding(.horizontal, Theme.screenPadding)
+                .padding(.top, 20)
+                .padding(.bottom, 24)
+                .background(
+                    Theme.background,
+                    in: UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28, style: .continuous)
+                )
             }
-            .padding(.horizontal, Theme.screenPadding)
-            .padding(.bottom, 24)
         }
-        .background(Theme.background.ignoresSafeArea())
+        .background {
+            // Warm tint behind the top section; the light app background below it
+            // so overscrolling at the bottom never shows the tint.
+            VStack(spacing: 0) {
+                LinearGradient(colors: [Theme.headerTintTop, Theme.headerTintBottom],
+                               startPoint: .top, endPoint: .bottom)
+                Theme.background
+            }
+            .ignoresSafeArea()
+        }
         .toolbar(.hidden, for: .navigationBar)          // custom glass header instead
         .safeAreaInset(edge: .bottom) { tabBar }        // floating Liquid Glass tab bar
     }
@@ -77,19 +100,37 @@ struct LandingView: View {
                     .lineLimit(1).minimumScaleFactor(0.8)
             }
             Spacer()
-            Text("\(app.points.formatted())")
-                .font(.system(size: 14, weight: .semibold))
-                .padding(.horizontal, 14).frame(height: 44)
-                .glass(in: Capsule())
-            GlassIconButton(systemName: "bell")
+            Button {} label: {
+                Image(systemName: "bell")
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundStyle(Theme.textPrimary)
+                    .frame(width: 40, height: 40)
+                    .overlay(alignment: .topTrailing) { CountBadge(count: 3).offset(x: -2, y: 2) }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Notifications, 3 unread")
+            Button("Sign off") {}
+                .font(.system(size: 15, weight: .regular))
+                .foregroundStyle(Theme.textPrimary)
+                .buttonStyle(.plain)
+                .padding(.leading, 8)
         }
         .padding(.top, 8)
     }
 
     private var titleBlock: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Good afternoon").font(.ltBody).foregroundStyle(Theme.textSecondary)
-            Text("Alex Morgan").font(.ltLargeTitle).foregroundStyle(Theme.textPrimary)
+        Text("\(greeting), Alex")
+            .font(.system(size: 28, weight: .regular))
+            .foregroundStyle(Theme.textPrimary)
+            .padding(.top, 18)
+    }
+
+    /// "Good morning / afternoon / evening" based on the current hour.
+    private var greeting: String {
+        switch Calendar.current.component(.hour, from: Date()) {
+        case 5..<12: return "Good morning"
+        case 12..<17: return "Good afternoon"
+        default: return "Good evening"
         }
     }
 
@@ -135,20 +176,37 @@ struct LandingView: View {
             .accessibilityElement(children: .combine)
     }
 
-    // MARK: Concierge search pill
+    // MARK: Concierge search bar
 
-    private var conciergePill: some View {
-        Button { app.push(.concierge) } label: {
-            HStack(spacing: 10) {
-                Image(systemName: "sparkle.magnifyingglass").foregroundStyle(Theme.red)
-                Text("Ask Concierge anything").foregroundStyle(Theme.textBody)
-                Spacer()
+    private var conciergeSearch: some View {
+        HStack(spacing: 12) {
+            Button { app.push(.concierge) } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass").foregroundStyle(Theme.textSecondary)
+                    Text("Need help? Ask Concierge").foregroundStyle(Theme.textBody)
+                    Spacer()
+                }
+                .font(.system(size: 16))
+                .padding(.horizontal, 14).frame(height: 42)
+                .background(Theme.card, in: Capsule())
+                .overlay(Capsule().stroke(Theme.hairline, lineWidth: 1))
             }
-            .font(.ltBody)
-            .padding(.horizontal, 18).frame(height: 52)
-            .glass(in: Capsule())
+            .buttonStyle(.plain)
+
+            Button { app.push(.concierge) } label: {
+                Image(systemName: "bubble.left.and.text.bubble.right.fill")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 36, height: 36)
+                    .background(
+                        LinearGradient(colors: [Theme.red, Color(hex: 0x6B1E5C)],
+                                       startPoint: .topLeading, endPoint: .bottomTrailing),
+                        in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .overlay(alignment: .topTrailing) { CountBadge(count: 1).offset(x: 6, y: -6) }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Concierge chat, 1 new message")
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: Book now grid
@@ -278,5 +336,18 @@ struct LandingView: View {
             .frame(maxWidth: .infinity)
         }
         .buttonStyle(.plain)
+    }
+}
+
+/// Small red count bubble used on the bell and concierge chat icons.
+private struct CountBadge: View {
+    let count: Int
+    var body: some View {
+        Text("\(count)")
+            .font(.system(size: 11, weight: .bold))
+            .foregroundStyle(.white)
+            .frame(minWidth: 17, minHeight: 17)
+            .background(Theme.red, in: Circle())
+            .overlay(Circle().stroke(.white, lineWidth: 1.5))
     }
 }

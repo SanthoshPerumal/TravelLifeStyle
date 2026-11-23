@@ -6,7 +6,7 @@ struct LandingView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     /// Screen shown in the secondary column on wide layouts (iPhone Duo open,
-    /// iPad). Defaults to the trip itinerary from "Trip details".
+    /// iPad). Defaults to the trip itinerary from "Trips".
     @State private var detail: Route = .itinerary
 
     private var isSplit: Bool { sizeClass == .regular }

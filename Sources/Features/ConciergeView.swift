@@ -36,7 +36,7 @@ struct ConciergeView: View {
                 TextField("Message Concierge", text: $input).padding(.leading, 6)
                     .submitLabel(.send).onSubmit { send(input) }
                 Button { send(input) } label: {
-                    Image(systemName: "arrow.up.circle.fill").font(.system(size: 30)).foregroundStyle(Theme.red)
+                    Image(systemName: "arrow.up.circle.fill").font(.title).foregroundStyle(Theme.red)
                 }
             }
             .padding(10).glass(in: Capsule()).padding(Theme.screenPadding)

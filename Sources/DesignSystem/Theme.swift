@@ -54,13 +54,18 @@ enum Theme {
     static let pointsPerDollar = 100
 }
 
-// MARK: - Type scale (SF Pro via system fonts → supports Dynamic Type)
+// MARK: - Type scale
+// Built on Apple's text styles (SF Pro) so every size follows the HIG type
+// ramp and scales with Dynamic Type. Avoid `.system(size:)` for text.
+// Default sizes: largeTitle 34 · title 28 · title2 22 · title3 20 · headline 17
+// semibold · body 17 · callout 16 · subheadline 15 · footnote 13 · caption 12 ·
+// caption2 11 (the HIG minimum).
 
 extension Font {
-    static let ltLargeTitle  = Font.system(size: 34, weight: .bold)
-    static let ltTitle       = Font.system(size: 22, weight: .bold)
-    static let ltHeadline    = Font.system(size: 17, weight: .semibold)
-    static let ltBody    = Font.system(size: 15, weight: .regular)
-    static let ltCaption     = Font.system(size: 13, weight: .regular)
-    static let ltCaptionBold = Font.system(size: 12, weight: .semibold)
+    static let ltLargeTitle  = Font.largeTitle.bold()
+    static let ltTitle       = Font.title2.bold()
+    static let ltHeadline    = Font.headline
+    static let ltBody        = Font.body
+    static let ltCaption     = Font.footnote
+    static let ltCaptionBold = Font.caption.weight(.semibold)
 }

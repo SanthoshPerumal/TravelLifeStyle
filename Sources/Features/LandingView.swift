@@ -11,11 +11,11 @@ struct LandingView: View {
     }
     private let services = [
         Service("Book flight", "airplane", nil),
-        Service("Book hotel", "building.2", .hotelResults),
-        Service("Book car", "car", nil),
+        Service("Book hotel", "building.2.fill", .hotelResults),
+        Service("Book car", "car.fill", nil),
         Service("Reserve a table", "fork.knife", .diningRestaurant),
-        Service("Book event", "theatermasks", nil),
-        Service("Book experience", "ticket", nil)
+        Service("Book event", "theatermasks.fill", nil),
+        Service("Book experience", "ticket.fill", nil)
     ]
 
     /// Hotels with a current offer, for the "Latest hotel offers" carousel.
@@ -75,14 +75,14 @@ struct LandingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                     .accessibilityLabel("Wells Fargo")
                 Text("Travel LifeStyle")
-                    .font(.system(size: 17, weight: .bold))
+                    .font(.headline)
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1).minimumScaleFactor(0.8)
             }
             Spacer()
             Button {} label: {
                 Image(systemName: "bell")
-                    .font(.system(size: 20, weight: .regular))
+                    .font(.title3)
                     .foregroundStyle(Theme.textPrimary)
                     .frame(width: 40, height: 40)
                     .overlay(alignment: .topTrailing) { CountBadge(count: 3).offset(x: -2, y: 2) }
@@ -90,7 +90,7 @@ struct LandingView: View {
             .buttonStyle(.plain)
             .accessibilityLabel("Notifications, 3 unread")
             Button("Sign off") {}
-                .font(.system(size: 15, weight: .regular))
+                .font(.subheadline)
                 .foregroundStyle(Theme.textPrimary)
                 .buttonStyle(.plain)
                 .padding(.leading, 8)
@@ -100,7 +100,7 @@ struct LandingView: View {
 
     private var titleBlock: some View {
         Text("\(greeting), Alex")
-            .font(.system(size: 28, weight: .regular))
+            .font(.title)
             .foregroundStyle(Theme.textPrimary)
             .padding(.top, 18)
     }
@@ -122,11 +122,11 @@ struct LandingView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 4) {
                 Text("Autograph Journey Visa (…4821)")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.headline)
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1).minimumScaleFactor(0.8)
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.footnote.weight(.semibold))
                     .foregroundStyle(Theme.textSecondary)
             }
 
@@ -142,7 +142,7 @@ struct LandingView: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
-                        .font(.system(size: 32, weight: .regular))
+                        .font(.largeTitle)
                         .foregroundStyle(Theme.textPrimary)
                         .lineLimit(1).minimumScaleFactor(0.7)
                     Text("Rewards balance")
@@ -152,15 +152,16 @@ struct LandingView: View {
 
             HStack(spacing: 10) {
                 Image(systemName: "star")
-                    .font(.system(size: 16, weight: .regular))
+                    .font(.callout)
                 Text("\(app.points.formatted()) rewards points")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.subheadline.weight(.semibold))
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Theme.textSecondary)
             }
             .foregroundStyle(Theme.textPrimary)
-            .padding(.horizontal, 14).frame(height: 44)
+            .padding(.horizontal, 14).frame(minHeight: 44)
             .background(Theme.rewardsStrip, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .padding(18)
@@ -179,8 +180,8 @@ struct LandingView: View {
                     Text("Need help? Ask Concierge").foregroundStyle(Theme.textBody)
                     Spacer()
                 }
-                .font(.system(size: 16))
-                .padding(.horizontal, 14).frame(height: 42)
+                .font(.body)
+                .padding(.horizontal, 14).frame(minHeight: 42)
                 .background(Theme.card, in: Capsule())
                 .overlay(Capsule().stroke(Theme.hairline, lineWidth: 1))
             }
@@ -188,13 +189,10 @@ struct LandingView: View {
 
             Button { app.push(.concierge) } label: {
                 Image(systemName: "bubble.left.and.text.bubble.right.fill")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
-                    .background(
-                        LinearGradient(colors: [Theme.red, Color(hex: 0x6B1E5C)],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing),
-                        in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .background(Theme.red, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
                     .overlay(alignment: .topTrailing) { CountBadge(count: 1).offset(x: 6, y: -6) }
             }
             .buttonStyle(.plain)
@@ -213,11 +211,12 @@ struct LandingView: View {
                     Button { if let r = s.route { app.push(r) } } label: {
                         VStack(spacing: 10) {
                             Image(systemName: s.icon)
-                                .font(.system(size: 30, weight: .light))
+                                .font(.title.weight(.light))
+                                .symbolRenderingMode(.monochrome)
                                 .foregroundStyle(Theme.red)
                                 .frame(height: 36)
                             Text(s.id)
-                                .font(.system(size: 15, weight: .regular))
+                                .font(.subheadline)
                                 .foregroundStyle(Theme.textPrimary)
                                 .lineLimit(1).minimumScaleFactor(0.8)
                         }
@@ -257,14 +256,13 @@ struct LandingView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(o.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary).lineLimit(1)
                 HStack(spacing: 4) {
-                    Image(systemName: "star.fill").foregroundStyle(Theme.gold)
-                    Text(String(format: "%.1f", o.rating)).foregroundStyle(Theme.textPrimary)
+                    RatingView(rating: o.rating)
                     Text("· \(o.area)").foregroundStyle(Theme.textSecondary).lineLimit(1)
                 }
                 .font(.ltCaption)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(Money.usd(o.dealNightly))
-                        .font(.system(size: 20, weight: .bold)).foregroundStyle(Theme.textPrimary)
+                        .font(.title3.bold()).foregroundStyle(Theme.textPrimary)
                     Text(Money.usd(o.nightly))
                         .font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
                     Text("/ night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
@@ -311,7 +309,7 @@ struct LandingView: View {
 
     private var tabBar: some View {
         HStack {
-            tabItem("house.fill", "Home", active: true) {}
+            tabItem("house", "Home", active: true) {}
             tabItem("safari", "Explore", active: false) { app.push(.concierge) }
             tabItem("suitcase", "Bookings", active: false) { app.push(.itinerary) }
             tabItem("person", "Profile", active: false) { app.push(.preferences) }
@@ -324,8 +322,9 @@ struct LandingView: View {
     private func tabItem(_ icon: String, _ label: String, active: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 2) {
-                Image(systemName: icon).font(.system(size: 19))
-                Text(label).font(.system(size: 10, weight: .medium))
+                // Filled symbol for the selected tab, outline otherwise (iOS tab bar convention).
+                Image(systemName: active ? icon + ".fill" : icon).font(.title3)
+                Text(label).font(.caption2.weight(.medium))
             }
             .foregroundStyle(active ? Theme.red : Theme.textSecondary)
             .frame(maxWidth: .infinity)
@@ -339,7 +338,7 @@ private struct CountBadge: View {
     let count: Int
     var body: some View {
         Text("\(count)")
-            .font(.system(size: 11, weight: .bold))
+            .font(.caption2.bold())
             .foregroundStyle(.white)
             .frame(minWidth: 17, minHeight: 17)
             .background(Theme.red, in: Circle())

@@ -43,7 +43,7 @@ struct HotelPayView: View {
 
             // Card is simulated – never collect real card data in this POC.
             HStack {
-                Image(systemName: "creditcard.fill").foregroundStyle(Theme.red)
+                Image(systemName: "creditcard.fill").foregroundStyle(Theme.textSecondary)
                 Text("Autograph Journey •••• 4821").font(.ltBody)
                 Spacer()
                 Text(Money.usd(app.hotelCash)).font(.ltHeadline)

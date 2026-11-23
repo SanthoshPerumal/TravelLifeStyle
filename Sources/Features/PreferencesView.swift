@@ -73,7 +73,7 @@ struct PreferencesView: View {
             Button {
                 let v = text.wrappedValue.trimmingCharacters(in: .whitespaces)
                 if !v.isEmpty { onAdd(v); text.wrappedValue = "" }
-            } label: { Image(systemName: "plus.circle.fill").foregroundStyle(Theme.red).font(.system(size: 24)) }
+            } label: { Image(systemName: "plus.circle.fill").foregroundStyle(Theme.red).font(.title2) }
         }
         .padding(.horizontal, 18).padding(.vertical, 12).card()
     }

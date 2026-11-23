@@ -15,7 +15,7 @@ struct ItineraryView: View {
                 HStack {
                     Text("Your Trip in Houston").font(.ltHeadline)
                     Spacer()
-                    Circle().fill(Theme.gold).frame(width: 10, height: 10)
+                    Circle().fill(Theme.red).frame(width: 10, height: 10)
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Label("UA 1203 · Main Cabin", systemImage: "airplane").font(.ltBody)

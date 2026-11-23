@@ -62,7 +62,7 @@ struct InspireView: View {
 
     private func flightRow(_ airline: String, _ route: String, _ price: String) -> some View {
         HStack {
-            Image(systemName: "airplane").foregroundStyle(Theme.red)
+            Image(systemName: "airplane").foregroundStyle(Theme.textSecondary)
             VStack(alignment: .leading) {
                 Text(airline).font(.ltHeadline)
                 Text(route).font(.ltCaption).foregroundStyle(Theme.textSecondary)

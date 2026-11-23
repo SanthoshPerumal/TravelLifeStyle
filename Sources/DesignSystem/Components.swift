@@ -84,7 +84,7 @@ struct Chip: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 14, weight: .medium))
+                .font(.subheadline.weight(.medium))
                 .foregroundStyle(selected ? tint : Theme.textBody)
                 .padding(.horizontal, 14).padding(.vertical, 9)
                 .background(selected ? tint.opacity(0.10) : Color.white, in: Capsule())
@@ -174,7 +174,7 @@ struct GlassIconButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 17, weight: .medium))
+                .font(.body.weight(.medium))
                 .foregroundStyle(Theme.textPrimary)
                 .frame(width: 44, height: 44)
                 .glass(in: Circle())
@@ -199,7 +199,7 @@ struct HotelPhoto: View {
             .overlay(alignment: .topLeading) {
                 if hotel.percentOff > 0 {
                     Text("\(hotel.percentOff)% OFF")
-                        .font(.system(size: 12, weight: .bold))
+                        .font(.caption.bold())
                         .foregroundStyle(.white)
                         .padding(.horizontal, 10).padding(.vertical, 5)
                         .background(Theme.red, in: Capsule())
@@ -207,5 +207,24 @@ struct HotelPhoto: View {
                 }
             }
             .accessibilityHidden(true)
+    }
+}
+
+/// Star rating used on every hotel surface: gold star, rating, optional review count.
+/// Inherits the caller's font.
+struct RatingView: View {
+    let rating: Double
+    var reviews: Int? = nil
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Image(systemName: "star.fill").foregroundStyle(Theme.gold).imageScale(.small)
+            Text(String(format: "%.1f", rating)).foregroundStyle(Theme.textPrimary)
+            if let reviews {
+                Text("(\(reviews.formatted()))").foregroundStyle(Theme.textSecondary)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(String(format: "Rated %.1f", rating) + (reviews.map { ", \($0) reviews" } ?? ""))
     }
 }

@@ -14,7 +14,11 @@ struct HotelRoomsView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("\(hotel.area) · ★ \(String(format: "%.1f", hotel.rating))").font(.ltBody)
+                HStack(spacing: 4) {
+                    Text("\(hotel.area) ·")
+                    RatingView(rating: hotel.rating)
+                }
+                .font(.ltBody)
                 Text("\(Sample.dates) · \(Sample.guests) guests").font(.ltCaption).foregroundStyle(Theme.textSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
@@ -46,7 +50,7 @@ struct HotelRoomsView: View {
         let selected = app.room.id == r.id
         return HStack(alignment: .top, spacing: 14) {
             Image(systemName: selected ? "largecircle.fill.circle" : "circle")
-                .foregroundStyle(selected ? Theme.red : Theme.textSecondary).font(.system(size: 22))
+                .foregroundStyle(selected ? Theme.red : Theme.textSecondary).font(.title2)
             VStack(alignment: .leading, spacing: 4) {
                 Text(r.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 Text(r.bed).font(.ltCaption).foregroundStyle(Theme.textSecondary)

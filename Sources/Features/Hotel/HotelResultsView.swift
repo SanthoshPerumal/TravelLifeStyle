@@ -59,8 +59,11 @@ struct HotelResultsView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(h.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
-                    Text("\(h.area) · ★ \(String(format: "%.1f", h.rating)) (\(h.reviews))")
-                        .font(.ltCaption).foregroundStyle(Theme.textSecondary)
+                    HStack(spacing: 4) {
+                        Text("\(h.area) ·").foregroundStyle(Theme.textSecondary)
+                        RatingView(rating: h.rating, reviews: h.reviews)
+                    }
+                    .font(.ltCaption)
                     if h.freeCancel {
                         Text("Free cancellation").font(.ltCaptionBold).foregroundStyle(Theme.success)
                     }

@@ -89,18 +89,19 @@ struct TripItemDetailView: View {
         if app.diningBooked {
             VStack(spacing: 10) {
                 KeyValueRow(key: "Reservation", value: "RSV-7K2M9Q")
-                KeyValueRow(key: "Restaurant", value: Sample.restaurant.name)
-                KeyValueRow(key: "Area", value: Sample.restaurant.area)
-                KeyValueRow(key: "When", value: "01/01/2027 · \(app.slot?.time ?? "–")")
+                KeyValueRow(key: "Restaurant", value: app.restaurant.name)
+                KeyValueRow(key: "Area", value: app.restaurant.area)
+                KeyValueRow(key: "When", value: "\(app.dining.dateText) · \(app.slot?.time ?? "–")")
                 KeyValueRow(key: "Party", value: "\(app.party)")
+                KeyValueRow(key: "Seating", value: app.seating.title)
                 Divider()
                 KeyValueRow(key: "Points", value: Money.pts(app.diningPointsUsed))
                 KeyValueRow(key: "Deposit", value: Money.usd(app.diningDeposit), bold: true)
             }
             .padding(Theme.cardPadding).card()
         } else {
-            notBooked("No table reserved at \(Sample.restaurant.name) yet.", action: "Reserve a table") {
-                app.push(.diningRestaurant)
+            notBooked("No table reserved yet.", action: "Reserve a table") {
+                app.push(.diningSearch)
             }
         }
     }

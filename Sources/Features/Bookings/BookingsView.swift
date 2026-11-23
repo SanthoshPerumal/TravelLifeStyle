@@ -65,9 +65,9 @@ struct TripItemSummary {
             subtitle = app.hotelBooked ? "\(app.room.name) · \(Sample.nights) nights" : "Not booked yet"
             confirmed = app.hotelBooked
         case .dining:
-            title = Sample.restaurant.name
+            title = app.diningBooked ? app.restaurant.name : "Dinner"
             subtitle = app.diningBooked
-                ? "Jan 1 · \(app.slot?.time ?? "–") · party of \(app.party)"
+                ? "\(app.dining.dateText) · \(app.slot?.time ?? "–") · party of \(app.party)"
                 : "Not reserved yet"
             confirmed = app.diningBooked
         }

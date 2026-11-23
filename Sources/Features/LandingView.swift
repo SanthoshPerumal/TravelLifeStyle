@@ -86,40 +86,44 @@ struct LandingView: View {
 
     // MARK: Balance card
 
+    /// Rewards balance shown on top of the Autograph Journey card artwork.
+    /// Text is placed only in the card's empty dark regions so it never covers
+    /// the printed logos, chip or network mark.
     private var balanceCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Rewards balance").font(.ltCaption).foregroundStyle(Theme.textSecondary)
-                    Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
-                        .font(.system(size: 34, weight: .bold))
-                    Text("\(app.points.formatted()) points").font(.ltBody).foregroundStyle(Theme.textBody)
-                }
-                Spacer()
-                cardArt
-            }
-            Text("Earn 5X on Hotels with Autograph Journey")
-                .font(.ltCaptionBold).foregroundStyle(Theme.goldText)
-                .padding(.horizontal, 12).padding(.vertical, 8)
-                .background(Theme.goldSoft, in: Capsule())
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .card(radius: 28)
-    }
+        Image("AutographJourneyCard")
+            .resizable()
+            .aspectRatio(432.0 / 276.0, contentMode: .fit)
+            .scaleEffect(1.03) // trims the white matte baked into the artwork's corners
+            .overlay {
+                GeometryReader { geo in
+                    let w = geo.size.width, h = geo.size.height
+                    ZStack(alignment: .topLeading) {
+                        // Right of the chip, below the gold stripe.
+                        Text("Earn 5X on Hotels")
+                            .font(.ltCaptionBold).foregroundStyle(Theme.gold)
+                            .lineLimit(1).minimumScaleFactor(0.7)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .background(.black.opacity(0.35), in: Capsule())
+                            .overlay(Capsule().stroke(Theme.gold.opacity(0.6), lineWidth: 1))
+                            .frame(width: w * 0.58, alignment: .trailing)
+                            .offset(x: w * 0.36, y: h * 0.45)
 
-    /// Generic (non-branded) credit card illustration drawn with shapes.
-    private var cardArt: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(LinearGradient(colors: [Color(hex: 0x333333), Color(hex: 0x595954)],
-                                 startPoint: .topLeading, endPoint: .bottomTrailing))
-            .frame(width: 92, height: 58)
-            .overlay(alignment: .bottomLeading) {
-                Text("Autograph\nJourney").font(.system(size: 8, weight: .bold)).foregroundStyle(.white).padding(8)
+                        // Bottom-left dark area, clear of the chip and the VISA mark.
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Rewards balance").font(.ltCaption).foregroundStyle(.white.opacity(0.75))
+                            Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
+                                .font(.system(size: 30, weight: .bold)).foregroundStyle(.white)
+                                .lineLimit(1).minimumScaleFactor(0.6)
+                            Text("\(app.points.formatted()) points").font(.ltBody).foregroundStyle(.white.opacity(0.85))
+                        }
+                        .frame(width: w * 0.66, height: h * 0.42, alignment: .bottomLeading)
+                        .offset(x: w * 0.06, y: h * 0.53)
+                    }
+                }
             }
-            .overlay(alignment: .topTrailing) {
-                Circle().fill(Theme.gold).frame(width: 14, height: 14).padding(8)
-            }
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .shadow(color: .black.opacity(0.18), radius: 14, y: 8)
+            .accessibilityElement(children: .combine)
     }
 
     // MARK: Concierge search pill

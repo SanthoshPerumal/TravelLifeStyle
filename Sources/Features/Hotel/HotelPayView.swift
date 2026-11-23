@@ -7,7 +7,7 @@ struct HotelPayView: View {
     /// The user must accept the new price before continuing.
     @State private var accepted = false
 
-    private var oldTotal: Int { Money.total(nightly: app.room.nightly) }
+    private var oldTotal: Int { Money.total(nightly: app.roomNightly) }
 
     var body: some View {
         Screen(title: "Payment") {
@@ -24,11 +24,16 @@ struct HotelPayView: View {
 
             // Price breakdown
             VStack(spacing: 10) {
-                let nightly = app.room.nightly + Sample.repricePerNight
+                let nightly = app.roomNightly + Sample.repricePerNight
                 KeyValueRow(key: "\(app.room.name) × \(Sample.nights) nights", value: Money.usd(nightly * Sample.nights))
                 KeyValueRow(key: "Taxes & fees (13%)", value: Money.usd(app.hotelTotal - nightly * Sample.nights))
                 Divider()
                 KeyValueRow(key: "Total", value: Money.usd(app.hotelTotal), bold: true)
+                if app.hotel.percentOff > 0 {
+                    Label("Includes \(app.hotel.percentOff)% hotel offer", systemImage: "tag.fill")
+                        .font(.ltCaptionBold).foregroundStyle(Theme.success)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .padding(18).card()
 

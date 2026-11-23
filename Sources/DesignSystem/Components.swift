@@ -182,3 +182,30 @@ struct GlassIconButton: View {
         .buttonStyle(.plain)
     }
 }
+
+/// A hotel's photo with its "% OFF" offer badge in the top-leading corner.
+/// Callers set the corner shape (cards clip it, the details hero rounds it).
+struct HotelPhoto: View {
+    let hotel: Hotel
+    var width: CGFloat? = nil
+    let height: CGFloat
+
+    var body: some View {
+        Color.clear
+            .frame(width: width, height: height)
+            .frame(maxWidth: width == nil ? .infinity : nil)
+            .overlay { Image(hotel.photo).resizable().scaledToFill() }
+            .clipped()
+            .overlay(alignment: .topLeading) {
+                if hotel.percentOff > 0 {
+                    Text("\(hotel.percentOff)% OFF")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 10).padding(.vertical, 5)
+                        .background(Theme.red, in: Capsule())
+                        .padding(12)
+                }
+            }
+            .accessibilityHidden(true)
+    }
+}

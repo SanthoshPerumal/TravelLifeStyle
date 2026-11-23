@@ -42,8 +42,10 @@ final class AppState: ObservableObject {
 
     // Derived values --------------------------------------------------------
 
-    /// Hotel total after the +$5/night reprice the user accepted.
-    var hotelTotal: Int { Money.total(nightly: room.nightly + Sample.repricePerNight) }
+    /// Selected room's nightly rate after the hotel's current offer.
+    var roomNightly: Int { hotel.dealPrice(room.nightly) }
+    /// Hotel total after the offer and the +$5/night reprice the user accepted.
+    var hotelTotal: Int { Money.total(nightly: roomNightly + Sample.repricePerNight) }
     /// Cash due after applying points (100 pts = $1).
     var hotelCash: Int { max(hotelTotal - hotelPointsUsed / Theme.pointsPerDollar, 0) }
     var diningDeposit: Int { 400 }

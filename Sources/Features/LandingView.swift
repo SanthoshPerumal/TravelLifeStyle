@@ -18,26 +18,8 @@ struct LandingView: View {
         Service("Book experience", "ticket", nil)
     ]
 
-    /// A discounted hotel deal in the "Latest hotel offers" carousel.
-    private struct HotelOffer: Identifiable {
-        let hotel: Hotel
-        let photo: String       // asset name (Unsplash photo, see README)
-        let percentOff: Int
-        var id: String { hotel.id }
-        var dealPrice: Int { hotel.nightly * (100 - percentOff) / 100 }
-    }
-    private let offers: [HotelOffer] = {
-        let deals: [String: (String, Int)] = [
-            "caribbean": ("HotelCaribbean", 20),
-            "modern":    ("HotelModern", 15),
-            "garden":    ("HotelGarden", 25),
-            "bayou":     ("HotelBayou", 10),
-            "sunset":    ("HotelSunset", 30)
-        ]
-        return Sample.hotels.compactMap { h in
-            deals[h.id].map { HotelOffer(hotel: h, photo: $0.0, percentOff: $0.1) }
-        }
-    }()
+    /// Hotels with a current offer, for the "Latest hotel offers" carousel.
+    private var offers: [Hotel] { Sample.hotels.filter { $0.percentOff > 0 } }
 
     var body: some View {
         ScrollView {
@@ -257,7 +239,7 @@ struct LandingView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(offers) { o in
-                        Button { app.push(.hotelRooms(o.hotel.id)) } label: {
+                        Button { app.push(.hotelRooms(o.id)) } label: {
                             offerCard(o)
                         }
                         .buttonStyle(.plain)
@@ -269,34 +251,21 @@ struct LandingView: View {
         }
     }
 
-    private func offerCard(_ o: HotelOffer) -> some View {
+    private func offerCard(_ o: Hotel) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Image(o.photo)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 260, height: 160)
-                .clipped()
-                .overlay(alignment: .topLeading) {
-                    Text("\(o.percentOff)% OFF")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 10).padding(.vertical, 5)
-                        .background(Theme.red, in: Capsule())
-                        .padding(12)
-                }
-                .accessibilityHidden(true)
+            HotelPhoto(hotel: o, width: 260, height: 160)
             VStack(alignment: .leading, spacing: 6) {
-                Text(o.hotel.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary).lineLimit(1)
+                Text(o.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary).lineLimit(1)
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill").foregroundStyle(Theme.gold)
-                    Text(String(format: "%.1f", o.hotel.rating)).foregroundStyle(Theme.textPrimary)
-                    Text("· \(o.hotel.area)").foregroundStyle(Theme.textSecondary).lineLimit(1)
+                    Text(String(format: "%.1f", o.rating)).foregroundStyle(Theme.textPrimary)
+                    Text("· \(o.area)").foregroundStyle(Theme.textSecondary).lineLimit(1)
                 }
                 .font(.ltCaption)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(Money.usd(o.dealPrice))
+                    Text(Money.usd(o.dealNightly))
                         .font(.system(size: 20, weight: .bold)).foregroundStyle(Theme.textPrimary)
-                    Text(Money.usd(o.hotel.nightly))
+                    Text(Money.usd(o.nightly))
                         .font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
                     Text("/ night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
@@ -307,7 +276,7 @@ struct LandingView: View {
         .card()
         .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(o.hotel.name), \(o.percentOff) percent off, \(Money.usd(o.dealPrice)) per night, was \(Money.usd(o.hotel.nightly))")
+        .accessibilityLabel("\(o.name), \(o.percentOff) percent off, \(Money.usd(o.dealNightly)) per night, was \(Money.usd(o.nightly))")
     }
 
     // MARK: My plans

@@ -13,6 +13,13 @@ struct Hotel: Identifiable, Hashable {
     let nightly: Int          // starting nightly price in USD
     let freeCancel: Bool
     let scene: SceneKind
+    let photo: String         // asset name (Unsplash photo, credited in the README)
+    let percentOff: Int       // current offer; 0 = no discount
+
+    /// Applies this hotel's current offer to a nightly rate.
+    func dealPrice(_ nightly: Int) -> Int { nightly * (100 - percentOff) / 100 }
+    /// Starting nightly price after the offer.
+    var dealNightly: Int { dealPrice(nightly) }
 }
 
 struct Room: Identifiable, Hashable {
@@ -57,11 +64,11 @@ enum Sample {
     static let repricePerNight = 5
 
     static let hotels: [Hotel] = [
-        Hotel(id: "caribbean", name: "Caribbean Beach Hotel", area: "Galveston Bay", rating: 4.7, reviews: 1820, nightly: 250, freeCancel: true,  scene: .beach),
-        Hotel(id: "bayou",     name: "Bayou City Suites",     area: "Downtown",      rating: 4.5, reviews: 960,  nightly: 189, freeCancel: true,  scene: .city),
-        Hotel(id: "garden",    name: "The Garden House",      area: "Montrose",      rating: 4.6, reviews: 540,  nightly: 215, freeCancel: false, scene: .garden),
-        Hotel(id: "sunset",    name: "Sunset Terrace",        area: "Uptown",        rating: 4.4, reviews: 1210, nightly: 175, freeCancel: true,  scene: .sunset),
-        Hotel(id: "modern",    name: "Modern Loft Hotel",     area: "Museum District", rating: 4.8, reviews: 320, nightly: 289, freeCancel: false, scene: .modern)
+        Hotel(id: "caribbean", name: "Caribbean Beach Hotel", area: "Galveston Bay", rating: 4.7, reviews: 1820, nightly: 250, freeCancel: true,  scene: .beach,  photo: "HotelCaribbean", percentOff: 20),
+        Hotel(id: "bayou",     name: "Bayou City Suites",     area: "Downtown",      rating: 4.5, reviews: 960,  nightly: 189, freeCancel: true,  scene: .city,   photo: "HotelBayou",     percentOff: 10),
+        Hotel(id: "garden",    name: "The Garden House",      area: "Montrose",      rating: 4.6, reviews: 540,  nightly: 215, freeCancel: false, scene: .garden, photo: "HotelGarden",    percentOff: 25),
+        Hotel(id: "sunset",    name: "Sunset Terrace",        area: "Uptown",        rating: 4.4, reviews: 1210, nightly: 175, freeCancel: true,  scene: .sunset, photo: "HotelSunset",    percentOff: 30),
+        Hotel(id: "modern",    name: "Modern Loft Hotel",     area: "Museum District", rating: 4.8, reviews: 320, nightly: 289, freeCancel: false, scene: .modern, photo: "HotelModern",    percentOff: 15)
     ]
 
     static let rooms: [Room] = [

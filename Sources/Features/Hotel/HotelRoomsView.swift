@@ -10,7 +10,7 @@ struct HotelRoomsView: View {
 
     var body: some View {
         Screen(title: hotel.name) {
-            SceneArt(kind: hotel.scene).frame(height: 200)
+            HotelPhoto(hotel: hotel, height: 200)
                 .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 
             VStack(alignment: .leading, spacing: 6) {
@@ -28,7 +28,7 @@ struct HotelRoomsView: View {
         .safeAreaInset(edge: .bottom) {
             StickyBar {
                 VStack(alignment: .leading) {
-                    Text(Money.usd(Money.total(nightly: app.room.nightly))).font(.ltHeadline)
+                    Text(Money.usd(Money.total(nightly: hotel.dealPrice(app.room.nightly)))).font(.ltHeadline)
                     Text("total incl. taxes").font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
                 Spacer()
@@ -54,7 +54,10 @@ struct HotelRoomsView: View {
             }
             Spacer()
             VStack(alignment: .trailing) {
-                Text(Money.usd(r.nightly)).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                Text(Money.usd(hotel.dealPrice(r.nightly))).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                if hotel.percentOff > 0 {
+                    Text(Money.usd(r.nightly)).font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
+                }
                 Text("per night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
             }
         }

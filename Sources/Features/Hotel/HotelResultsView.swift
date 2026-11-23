@@ -15,7 +15,7 @@ struct HotelResultsView: View {
         if freeCancelOnly { list = list.filter { $0.freeCancel } }
         switch sort {
         case .recommended: break
-        case .price:  list.sort { $0.nightly < $1.nightly }
+        case .price:  list.sort { $0.dealNightly < $1.dealNightly }
         case .rating: list.sort { $0.rating > $1.rating }
         }
         return list
@@ -55,7 +55,7 @@ struct HotelResultsView: View {
 
     private func row(_ h: Hotel) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            SceneArt(kind: h.scene).frame(height: 150)
+            HotelPhoto(hotel: h, height: 150)
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(h.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
@@ -67,7 +67,10 @@ struct HotelResultsView: View {
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(Money.usd(h.nightly)).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                    Text(Money.usd(h.dealNightly)).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                    if h.percentOff > 0 {
+                        Text(Money.usd(h.nightly)).font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
+                    }
                     Text("per night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
             }

@@ -11,7 +11,7 @@ Open `TravelLifeStyle.xcodeproj`, select an iPhone simulator, and press Run.
 
 ## Photo credits
 
-Hotel offer photos on the landing page are from [Unsplash](https://unsplash.com) under the
+Hotel photos (landing page offers, hotel list and hotel details) are from [Unsplash](https://unsplash.com) under the
 [Unsplash License](https://unsplash.com/license). They are stock photos standing in for the
 sample hotels, not photos of those (fictional) properties.
 

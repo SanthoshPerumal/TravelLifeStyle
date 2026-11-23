@@ -202,7 +202,7 @@ struct HotelPhoto: View {
                         .font(.caption.bold())
                         .foregroundStyle(.white)
                         .padding(.horizontal, 10).padding(.vertical, 5)
-                        .background(Theme.red, in: Capsule())
+                        .background(Theme.photoBadge, in: Capsule())
                         .padding(12)
                 }
             }

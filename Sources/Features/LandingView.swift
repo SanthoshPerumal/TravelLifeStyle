@@ -190,9 +190,10 @@ struct LandingView: View {
             Button { app.push(.concierge) } label: {
                 Image(systemName: "bubble.left.and.text.bubble.right.fill")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.icon)
                     .frame(width: 36, height: 36)
-                    .background(Theme.red, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 9, style: .continuous).stroke(Theme.hairline, lineWidth: 1))
                     .overlay(alignment: .topTrailing) { CountBadge(count: 1).offset(x: 6, y: -6) }
             }
             .buttonStyle(.plain)
@@ -213,7 +214,7 @@ struct LandingView: View {
                             Image(systemName: s.icon)
                                 .font(.title.weight(.light))
                                 .symbolRenderingMode(.monochrome)
-                                .foregroundStyle(Theme.red)
+                                .foregroundStyle(Theme.icon)
                                 .frame(height: 36)
                             Text(s.id)
                                 .font(.subheadline)

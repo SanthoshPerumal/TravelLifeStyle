@@ -12,13 +12,13 @@ struct InspireView: View {
         Screen(title: "Inspire me") {
             // AI banner with refresh
             HStack {
-                Label("Inspire me · AI", systemImage: "sparkles").font(.ltHeadline).foregroundStyle(Theme.red)
+                Label("Inspire me · AI", systemImage: "sparkles").font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 Spacer()
                 Button { withAnimation { setIndex += 1 } } label: {
-                    Image(systemName: "arrow.clockwise").foregroundStyle(Theme.red)
+                    Image(systemName: "arrow.clockwise").foregroundStyle(Theme.icon)
                 }
             }
-            .padding(18).background(Theme.redSoft.opacity(0.5),
+            .padding(18).background(Theme.card,
                                     in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 
             // Suggested trip hero
@@ -29,7 +29,7 @@ struct InspireView: View {
                     Text("Kyoto 5-Night Escape").font(.ltTitle)
                     HStack { Badge(text: "Fav Brand"); Text("Park Hyatt Kyoto").font(.ltBody) }
                     HStack { Badge(text: "Fav Airline"); Text("ANA · SFO → KIX").font(.ltBody) }
-                    Text("Package from $3,420").font(.ltHeadline).foregroundStyle(Theme.red)
+                    Text("Package from $3,420").font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 }
                 .padding(18)
             }
@@ -53,7 +53,7 @@ struct InspireView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(s.title).font(.ltHeadline)
                 Text(s.subtitle).font(.ltCaption).foregroundStyle(Theme.textSecondary)
-                Text(s.detail).font(.ltBody).foregroundStyle(Theme.red)
+                Text(s.detail).font(.ltBody).foregroundStyle(Theme.textBody)
             }
             Spacer()
         }

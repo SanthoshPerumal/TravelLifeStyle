@@ -41,21 +41,33 @@ struct Screen<Content: View>: View {
 
 // MARK: - Buttons
 
-/// Primary red pill button (min height 52 → comfortable 44pt+ touch target).
+/// Primary or secondary pill button (min height 52 → comfortable 44pt+ touch target).
+/// Primary: solid dark fill, white text. Secondary: white fill, thin dark outline.
 struct PillButton: View {
+    enum Kind { case primary, secondary }
+
     let title: String
+    var kind: Kind = .primary
     var enabled: Bool = true
+    /// `false` sizes the button to its title (e.g. "Reserve" beside a price).
+    var fullWidth: Bool = true
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Text(title)
                 .font(.ltHeadline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, minHeight: 52)
-                .background(enabled ? Theme.red : Theme.red.opacity(0.35),
-                            in: RoundedRectangle(cornerRadius: Theme.pillRadius, style: .continuous))
+                .foregroundStyle(kind == .primary ? Color.white : Theme.button)
+                .padding(.horizontal, fullWidth ? 0 : 28)
+                .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 52)
+                .background(kind == .primary ? Theme.button : Color.white, in: Capsule())
+                .overlay {
+                    if kind == .secondary { Capsule().strokeBorder(Theme.button, lineWidth: 1) }
+                }
+                .opacity(enabled ? 1 : 0.35)
+                .contentShape(Capsule())
         }
+        .buttonStyle(.plain)
         .disabled(!enabled)   // disabled state doubles as form validation
     }
 }

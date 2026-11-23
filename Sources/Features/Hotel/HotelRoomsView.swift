@@ -79,12 +79,7 @@ struct HotelRoomsView: View {
                         .font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
                 Spacer()
-                Button { app.push(.hotelGuest) } label: {
-                    Text("Reserve").font(.ltHeadline).foregroundStyle(.white)
-                        .padding(.horizontal, 28).frame(height: 48)
-                        .background(anyRoomFits ? Theme.red : Theme.red.opacity(0.35), in: Capsule())
-                }
-                .disabled(!anyRoomFits)
+                PillButton(title: "Reserve", enabled: anyRoomFits, fullWidth: false) { app.push(.hotelGuest) }
             }
         }
     }

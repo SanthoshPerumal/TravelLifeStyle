@@ -121,9 +121,9 @@ struct HotelResultsView: View {
                  : "Try removing a filter or two.")
                 .font(.ltBody).foregroundStyle(Theme.textBody).multilineTextAlignment(.center)
             if hotelsHere.isEmpty {
-                Button("Change search", action: editSearch).font(.ltHeadline).foregroundStyle(Theme.red)
+                PillButton(title: "Change search", kind: .secondary, action: editSearch)
             } else {
-                Button("Clear filters") { app.filters = HotelFilters() }.font(.ltHeadline).foregroundStyle(Theme.red)
+                PillButton(title: "Clear filters", kind: .secondary) { app.filters = HotelFilters() }
             }
         }
         .frame(maxWidth: .infinity).padding(24).card()

@@ -63,7 +63,7 @@ struct ItineraryView: View {
 
             // Display-only actions (POC). See README for the note on these.
             HStack {
-                PillButton(title: "Add Activity") {}
+                PillButton(title: "Add Activity", kind: .secondary) {}
                 PillButton(title: "Wallet Passes") {}
             }
             .padding(.top, 4)

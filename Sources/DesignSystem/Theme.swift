@@ -29,6 +29,11 @@ enum Theme {
     static let goldSoft   = Color(hex: 0xF6E7C8)   // badge background
     static let goldText   = Color(hex: 0x8A6A2E)   // badge text
 
+    // Buttons
+    /// Fill for primary buttons and outline/text for secondary buttons
+    /// (dark warm brown, replaces red on buttons).
+    static let button     = Color(hex: 0x463D3A)
+
     // Surfaces
     static let background = Color(hex: 0xF5F5F7)   // app background
     static let headerTintTop    = Color(hex: 0xE4DBD1)   // warm tint behind the landing header

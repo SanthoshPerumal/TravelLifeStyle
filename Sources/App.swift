@@ -94,7 +94,7 @@ struct LifestyleTravelApp: App {
                     }
             }
             .environmentObject(app)
-            .tint(Theme.red)
+            .tint(Theme.button)   // nav bar & toolbar buttons (Back, Cancel, Done)
             .preferredColorScheme(.light)   // light mode only (per design brief)
         }
     }

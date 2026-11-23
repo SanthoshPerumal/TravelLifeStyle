@@ -1,12 +1,8 @@
 import SwiftUI
 
-/// Day 1 – Landing page: balance, "Travel, dining & experiences" grid, explore tabs, plans, tab bar.
+/// Day 1 – Landing page: balance, "Travel, dining & experiences" grid, hotel offers, plans, tab bar.
 struct LandingView: View {
     @EnvironmentObject var app: AppState
-
-    /// Which explore tab is selected (Travel / Entertainment / Dining / Exclusives).
-    @State private var tab = "Travel"
-    private let tabs = ["Travel", "Entertainment", "Dining", "Exclusives"]
 
     /// One tile in the "Travel, dining & experiences" grid. `route == nil` means "not in this release".
     private struct Service: Identifiable {
@@ -22,24 +18,26 @@ struct LandingView: View {
         Service("Book experience", "ticket", nil)
     ]
 
-    /// A promo card in the carousel.
-    private struct Promo: Identifiable {
-        let id: String; let title: String; let sub: String; let scene: SceneKind; let route: Route
+    /// A discounted hotel deal in the "Latest hotel offers" carousel.
+    private struct HotelOffer: Identifiable {
+        let hotel: Hotel
+        let photo: String       // asset name (Unsplash photo, see README)
+        let percentOff: Int
+        var id: String { hotel.id }
+        var dealPrice: Int { hotel.nightly * (100 - percentOff) / 100 }
     }
-    private var promos: [Promo] {
-        switch tab {
-        case "Travel":
-            return [Promo(id: "p1", title: "Caribbean Beach Hotel", sub: "From $250 / night", scene: .beach, route: .hotelRooms("caribbean")),
-                    Promo(id: "p2", title: "Alpine Adventure", sub: "Mountain stays", scene: .garden, route: .hotelResults),
-                    Promo(id: "p3", title: "Big City Nights", sub: "Urban escapes", scene: .city, route: .hotelResults)]
-        case "Dining":
-            return [Promo(id: "d1", title: "Trattoria Verde", sub: "Italian · Montrose", scene: .restaurant, route: .diningRestaurant),
-                    Promo(id: "d2", title: "Harbor & Vine", sub: "Seafood", scene: .sunset, route: .diningRestaurant),
-                    Promo(id: "d3", title: "Sol y Mar", sub: "Mexican", scene: .beach, route: .diningRestaurant)]
-        default:
-            return []
+    private let offers: [HotelOffer] = {
+        let deals: [String: (String, Int)] = [
+            "caribbean": ("HotelCaribbean", 20),
+            "modern":    ("HotelModern", 15),
+            "garden":    ("HotelGarden", 25),
+            "bayou":     ("HotelBayou", 10),
+            "sunset":    ("HotelSunset", 30)
+        ]
+        return Sample.hotels.compactMap { h in
+            deals[h.id].map { HotelOffer(hotel: h, photo: $0.0, percentOff: $0.1) }
         }
-    }
+    }()
 
     var body: some View {
         ScrollView {
@@ -57,7 +55,7 @@ struct LandingView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     balanceCard
                     bookNow
-                    explore
+                    hotelOffers
                     myPlans
                 }
                 .padding(.horizontal, Theme.screenPadding)
@@ -251,50 +249,65 @@ struct LandingView: View {
         }
     }
 
-    // MARK: Explore tabs + carousel
+    // MARK: Latest hotel offers
 
-    private var explore: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Underline tab list – selected = bold black text + red underline.
+    private var hotelOffers: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            SectionTitle(text: "Latest hotel offers")
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 22) {
-                    ForEach(tabs, id: \.self) { t in
-                        Button { withAnimation(.easeInOut(duration: 0.2)) { tab = t } } label: {
-                            VStack(spacing: 6) {
-                                Text(t).font(.system(size: 16, weight: tab == t ? .bold : .medium))
-                                    .foregroundStyle(tab == t ? Theme.textPrimary : Theme.textSecondary)
-                                Rectangle().fill(tab == t ? Theme.red : .clear).frame(height: 2)
-                            }
+                HStack(spacing: 16) {
+                    ForEach(offers) { o in
+                        Button { app.push(.hotelRooms(o.hotel.id)) } label: {
+                            offerCard(o)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
+                .padding(.vertical, 12)   // room for the card shadows
             }
-            if promos.isEmpty {
-                Text("Coming in a later release.").font(.ltBody).foregroundStyle(Theme.textSecondary)
-                    .frame(maxWidth: .infinity, minHeight: 120)
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
-                        ForEach(promos) { p in
-                            Button { app.push(p.route) } label: {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    SceneArt(kind: p.scene).frame(width: 240, height: 140)
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(p.title).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
-                                        Text(p.sub).font(.ltCaption).foregroundStyle(Theme.textSecondary)
-                                    }.padding(18)
-                                }
-                                .frame(width: 240, alignment: .leading)
-                                .card()
-                                .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.vertical, 12)   // room for the card shadows
-                }
-            }
+            .scrollClipDisabled()
         }
+    }
+
+    private func offerCard(_ o: HotelOffer) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Image(o.photo)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 260, height: 160)
+                .clipped()
+                .overlay(alignment: .topLeading) {
+                    Text("\(o.percentOff)% OFF")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 10).padding(.vertical, 5)
+                        .background(Theme.red, in: Capsule())
+                        .padding(12)
+                }
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(o.hotel.name).font(.ltHeadline).foregroundStyle(Theme.textPrimary).lineLimit(1)
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill").foregroundStyle(Theme.gold)
+                    Text(String(format: "%.1f", o.hotel.rating)).foregroundStyle(Theme.textPrimary)
+                    Text("· \(o.hotel.area)").foregroundStyle(Theme.textSecondary).lineLimit(1)
+                }
+                .font(.ltCaption)
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(Money.usd(o.dealPrice))
+                        .font(.system(size: 20, weight: .bold)).foregroundStyle(Theme.textPrimary)
+                    Text(Money.usd(o.hotel.nightly))
+                        .font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
+                    Text("/ night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
+                }
+            }
+            .padding(16)
+        }
+        .frame(width: 260, alignment: .leading)
+        .card()
+        .clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(o.hotel.name), \(o.percentOff) percent off, \(Money.usd(o.dealPrice)) per night, was \(Money.usd(o.hotel.nightly))")
     }
 
     // MARK: My plans

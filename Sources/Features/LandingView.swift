@@ -216,15 +216,15 @@ struct LandingView: View {
         VStack(alignment: .leading, spacing: 14) {
             SectionTitle(text: "Travel, dining & experiences")
             // Line icons over a label, no tile chrome.
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 22) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 14) {
                 ForEach(services) { s in
                     Button { if let r = s.route { app.push(r) } } label: {
-                        VStack(spacing: 10) {
+                        VStack(spacing: 8) {
                             Image(systemName: s.icon)
-                                .font(.title.weight(.light))
+                                .font(.title3)
                                 .symbolRenderingMode(.monochrome)
                                 .foregroundStyle(Theme.icon)
-                                .frame(height: 36)
+                                .frame(height: 26)
                             Text(s.id)
                                 .font(.subheadline)
                                 .foregroundStyle(Theme.textPrimary)

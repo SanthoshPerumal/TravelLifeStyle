@@ -22,7 +22,7 @@ struct LandingView: View {
     @State private var offerScroll = ScrollPosition(idType: String.self)
     @State private var offerIndex = 0
 
-    /// Hotels with a current offer, for the "Latest hotel offers" carousel.
+    /// Hotels with a current offer, for the "Hotel offers" carousel.
     private var offers: [Hotel] { Sample.hotels.filter { $0.percentOff > 0 } }
 
     var body: some View {
@@ -235,11 +235,11 @@ struct LandingView: View {
         }
     }
 
-    // MARK: Latest hotel offers
+    // MARK: Hotel offers
 
     private var hotelOffers: some View {
         VStack(alignment: .leading, spacing: 4) {
-            SectionTitle(text: "Latest hotel offers")
+            SectionTitle(text: "Hotel offers")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Self.offerSpacing) {
                     ForEach(offers) { o in

@@ -136,44 +136,57 @@ struct LandingView: View {
 
     // MARK: Balance card
 
-    /// Rewards balance shown on top of the Autograph Journey card artwork.
-    /// Text is placed only in the card's empty dark regions so it never covers
-    /// the printed logos, chip or network mark.
+    /// Account-style tile for the Autograph Journey card: name and last four,
+    /// a small card thumbnail beside the balance, and a rewards points strip.
     private var balanceCard: some View {
-        Image("AutographJourneyCard")
-            .resizable()
-            .aspectRatio(432.0 / 276.0, contentMode: .fit)
-            .scaleEffect(1.03) // trims the white matte baked into the artwork's corners
-            .overlay {
-                GeometryReader { geo in
-                    let w = geo.size.width, h = geo.size.height
-                    ZStack(alignment: .topLeading) {
-                        // Right of the chip, below the gold stripe.
-                        Text("Earn 5X on Hotels")
-                            .font(.ltCaptionBold).foregroundStyle(Theme.gold)
-                            .lineLimit(1).minimumScaleFactor(0.7)
-                            .padding(.horizontal, 10).padding(.vertical, 5)
-                            .background(.black.opacity(0.35), in: Capsule())
-                            .overlay(Capsule().stroke(Theme.gold.opacity(0.6), lineWidth: 1))
-                            .frame(width: w * 0.58, alignment: .trailing)
-                            .offset(x: w * 0.36, y: h * 0.45)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 4) {
+                Text("Autograph Journey Visa (…4821)")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1).minimumScaleFactor(0.8)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Theme.textSecondary)
+            }
 
-                        // Bottom-left dark area, clear of the chip and the VISA mark.
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Rewards balance").font(.ltCaption).foregroundStyle(.white.opacity(0.75))
-                            Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
-                                .font(.system(size: 30, weight: .bold)).foregroundStyle(.white)
-                                .lineLimit(1).minimumScaleFactor(0.6)
-                            Text("\(app.points.formatted()) points").font(.ltBody).foregroundStyle(.white.opacity(0.85))
-                        }
-                        .frame(width: w * 0.66, height: h * 0.42, alignment: .bottomLeading)
-                        .offset(x: w * 0.06, y: h * 0.53)
-                    }
+            HStack(alignment: .center) {
+                Image("AutographJourneyCard")
+                    .resizable()
+                    .aspectRatio(432.0 / 276.0, contentMode: .fit)
+                    .scaleEffect(1.03) // trims the white matte baked into the artwork's corners
+                    .frame(width: 104)
+                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                    .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                    .accessibilityLabel("Autograph Journey card")
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
+                        .font(.system(size: 32, weight: .regular))
+                        .foregroundStyle(Theme.textPrimary)
+                        .lineLimit(1).minimumScaleFactor(0.7)
+                    Text("Rewards balance")
+                        .font(.ltBody).foregroundStyle(Theme.textSecondary)
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .shadow(color: .black.opacity(0.18), radius: 14, y: 8)
-            .accessibilityElement(children: .combine)
+
+            HStack(spacing: 10) {
+                Image(systemName: "star")
+                    .font(.system(size: 16, weight: .regular))
+                Text("\(app.points.formatted()) rewards points")
+                    .font(.system(size: 15, weight: .semibold))
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+            }
+            .foregroundStyle(Theme.textPrimary)
+            .padding(.horizontal, 14).frame(height: 44)
+            .background(Theme.rewardsStrip, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .card(radius: 20)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: Concierge search bar

@@ -33,6 +33,7 @@ enum Theme {
     static let background = Color(hex: 0xF5F5F7)   // app background
     static let headerTintTop    = Color(hex: 0xE4DBD1)   // warm tint behind the landing header
     static let headerTintBottom = Color(hex: 0xEFE9E3)
+    static let rewardsStrip     = Color(hex: 0xF4F2FB)   // lavender rewards row on account tiles
     static let card       = Color.white            // content cards stay solid & clear
     static let hairline   = Color(hex: 0xE5E5E5)
 

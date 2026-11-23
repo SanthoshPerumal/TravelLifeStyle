@@ -278,11 +278,11 @@ struct LandingView: View {
         .accessibilityLabel("\(o.name), \(o.percentOff) percent off, \(Money.usd(o.dealNightly)) per night, was \(Money.usd(o.nightly))")
     }
 
-    // MARK: My plans
+    // MARK: Trip details
 
     private var myPlans: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionTitle(text: "My plans")
+            SectionTitle(text: "Trip details")
             Button { app.push(.itinerary) } label: {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Houston · \(Sample.dates)").font(.ltHeadline)

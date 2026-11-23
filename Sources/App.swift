@@ -92,6 +92,17 @@ final class AppState: ObservableObject {
 struct LifestyleTravelApp: App {
     @StateObject private var app = AppState()
 
+    init() {
+        // Large page titles in the regular weight, like the Wells Fargo app.
+        // The text-style font keeps Dynamic Type scaling.
+        let bar = UINavigationBar.appearance()
+        bar.largeTitleTextAttributes = [
+            .font: UIFont.preferredFont(forTextStyle: .largeTitle),
+            .foregroundColor: UIColor(Theme.textPrimary)
+        ]
+        bar.titleTextAttributes = [.foregroundColor: UIColor(Theme.textPrimary)]
+    }
+
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $app.path) {

@@ -39,7 +39,7 @@ struct HotelGuestView: View {
                           error: app.guest.phoneValid ? nil : "Enter at least 10 digits",
                           contentType: .telephoneNumber, keyboard: .phonePad, focus: $focus, field: .phone)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             VStack(alignment: .leading, spacing: 14) {
                 Text("Arrival & requests").font(.ltHeadline)
@@ -57,7 +57,7 @@ struct HotelGuestView: View {
                 Text("Requests aren't guaranteed and depend on availability.")
                     .font(.ltCaption).foregroundStyle(Theme.textSecondary)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
         }
         .scrollDismissesKeyboard(.interactively)
         .toolbar {

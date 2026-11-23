@@ -40,7 +40,7 @@ struct DiningResultsView: View {
                         .overlay(Capsule().stroke(Theme.hairline, lineWidth: 1))
                 }
                 .foregroundStyle(Theme.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+                .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
             }
             .buttonStyle(.plain)
             .accessibilityHint("Change location, date, time or party size")

@@ -27,7 +27,7 @@ struct DiningConfirmedView: View {
                     .font(.ltCaptionBold).foregroundStyle(Theme.success)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             VStack(alignment: .leading, spacing: 10) {
                 Label(app.restaurant.address, systemImage: "mappin.and.ellipse")
@@ -35,7 +35,7 @@ struct DiningConfirmedView: View {
             }
             .font(.ltBody).foregroundStyle(Theme.textBody)
             .labelStyle(IconLabelStyle())
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("Your trip").font(.ltHeadline)
@@ -45,7 +45,7 @@ struct DiningConfirmedView: View {
             }
             .font(.ltBody).foregroundStyle(Theme.textBody)
             .labelStyle(IconLabelStyle())
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
         }
         .navigationBarBackButtonHidden(true)     // reservation is done – no going back into checkout
         .safeAreaInset(edge: .bottom) {

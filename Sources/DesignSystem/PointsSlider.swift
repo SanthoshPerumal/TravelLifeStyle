@@ -29,7 +29,7 @@ struct PointsSlider: View {
             Text("Balance: \(balance.formatted()) pts")
                 .font(.ltCaption).foregroundStyle(Theme.textSecondary)
         }
-        .padding(18)
+        .padding(Theme.cardPadding)
         .card()
     }
 }

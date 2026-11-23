@@ -23,7 +23,7 @@ struct HotelConfirmView: View {
                     .font(.ltCaptionBold)
                     .foregroundStyle(app.rate == .flexible ? Theme.success : Theme.goldText)
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             VStack(spacing: 10) {
                 KeyValueRow(key: "Points", value: Money.pts(app.hotelPointsUsed))
@@ -31,10 +31,10 @@ struct HotelConfirmView: View {
                 Divider()
                 KeyValueRow(key: "Total", value: Money.usd(app.hotelTotal), bold: true)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             Toggle("I agree to the terms and cancellation policy", isOn: $agreed)
-                .tint(Theme.button).font(.ltBody).padding(18).card()
+                .tint(Theme.button).font(.ltBody).padding(Theme.cardPadding).card()
         }
         .safeAreaInset(edge: .bottom) {
             StickyBar {

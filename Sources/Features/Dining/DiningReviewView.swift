@@ -25,7 +25,7 @@ struct DiningReviewView: View {
                     Text("“\(app.diningRequests.notes)”").font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             VStack(alignment: .leading, spacing: 10) {
                 KeyValueRow(key: "Deposit", value: Money.usd(app.diningDeposit))
@@ -35,10 +35,10 @@ struct DiningReviewView: View {
                 Text("Free cancellation until \(app.diningCancelDeadline)")
                     .font(.ltCaptionBold).foregroundStyle(Theme.success)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             Toggle("I agree to the terms and cancellation policy", isOn: $agreed)
-                .tint(Theme.button).font(.ltBody).padding(18).card()
+                .tint(Theme.button).font(.ltBody).padding(Theme.cardPadding).card()
         }
         .safeAreaInset(edge: .bottom) {
             StickyBar {

@@ -55,7 +55,7 @@ struct PreferencesView: View {
             Text(title).font(.ltHeadline)
             content()
         }
-        .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+        .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
     }
 
     /// Wrapping flow of selectable chips (uses a simple LazyVGrid for wrapping).

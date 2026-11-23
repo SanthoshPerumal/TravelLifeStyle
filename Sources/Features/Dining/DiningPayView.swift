@@ -20,7 +20,7 @@ struct DiningPayView: View {
                     .font(.ltCaptionBold).foregroundStyle(Theme.success)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             PointsSlider(value: $app.diningPointsUsed, maxValue: maxPoints, balance: app.points)
 
@@ -31,7 +31,7 @@ struct DiningPayView: View {
                 Spacer()
                 Text(Money.usd(app.diningCash)).font(.ltHeadline)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("Cancellation policy").font(.ltHeadline)
@@ -40,7 +40,7 @@ struct DiningPayView: View {
                 Text("After that, or if you don't show up, the deposit isn't refunded. Tables are held for 15 minutes.")
                     .font(.ltCaption).foregroundStyle(Theme.textSecondary)
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
         }
         .onAppear { app.diningPointsUsed = min(app.diningPointsUsed, maxPoints) }
         .safeAreaInset(edge: .bottom) {

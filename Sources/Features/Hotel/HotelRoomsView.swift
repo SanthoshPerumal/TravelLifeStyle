@@ -32,7 +32,7 @@ struct HotelRoomsView: View {
                     .font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 Text(app.search.travelersText).font(.ltCaption).foregroundStyle(Theme.textSecondary)
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             if !hotel.amenityList.isEmpty {
                 SectionTitle(text: "Amenities")
@@ -45,7 +45,7 @@ struct HotelRoomsView: View {
                             .labelStyle(AmenityLabelStyle())
                     }
                 }
-                .padding(18).card()
+                .padding(Theme.cardPadding).card()
             }
 
             SectionTitle(text: "Choose a room")

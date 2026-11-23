@@ -30,7 +30,7 @@ struct DiningRestaurantView: View {
                 .font(.ltCaption).foregroundStyle(Theme.textBody)
                 .labelStyle(IconLabelStyle())
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             SectionTitle(text: "Reservation")
             reservationCard
@@ -59,7 +59,7 @@ struct DiningRestaurantView: View {
                         .labelStyle(IconLabelStyle())
                 }
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             Label("A \(Money.usd(r.depositPerGuest)) per guest deposit holds your table and comes off your bill. Free cancellation up to 24 hours before.",
                   systemImage: "info.circle")
@@ -120,7 +120,7 @@ struct DiningRestaurantView: View {
                     .font(.ltBody).foregroundStyle(Theme.textBody)
             }
         }
-        .padding(18).card()
+        .padding(Theme.cardPadding).card()
     }
 
     private func seatingRow(_ s: Seating) -> some View {
@@ -187,7 +187,7 @@ struct DiningMenuView: View {
                         .padding(.top, 4)
                         Text("V vegetarian · VG vegan · GF gluten-free").font(.caption).foregroundStyle(Theme.textSecondary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
                     Section {
                         ForEach(r.menu) { section in
@@ -200,7 +200,7 @@ struct DiningMenuView: View {
                                             .buttonStyle(.plain)
                                     }
                                 }
-                                .padding(18).card()
+                                .padding(Theme.cardPadding).card()
                             }
                             .id(section.id)
                         }

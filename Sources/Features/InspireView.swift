@@ -18,7 +18,7 @@ struct InspireView: View {
                     Image(systemName: "arrow.clockwise").foregroundStyle(Theme.icon)
                 }
             }
-            .padding(18).background(Theme.card,
+            .padding(Theme.cardPadding).background(Theme.card,
                                     in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 
             // Suggested trip hero
@@ -31,7 +31,7 @@ struct InspireView: View {
                     HStack { Badge(text: "Fav Airline"); Text("ANA · SFO → KIX").font(.ltBody) }
                     Text("Package from $3,420").font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 }
-                .padding(18)
+                .padding(Theme.cardPadding)
             }
             .card().clipShape(RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 

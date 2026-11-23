@@ -21,7 +21,7 @@ struct HotelPayView: View {
                     .font(.ltBody).foregroundStyle(Theme.textBody)
                 Toggle("I accept the new price", isOn: $accepted).tint(Theme.button)
             }
-            .padding(18).background(Theme.goldSoft.opacity(0.5),
+            .padding(Theme.cardPadding).background(Theme.goldSoft.opacity(0.5),
                                     in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
 
             // Price breakdown
@@ -39,7 +39,7 @@ struct HotelPayView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             PointsSlider(value: $app.hotelPointsUsed,
                          maxValue: min(app.points, app.hotelTotal * Theme.pointsPerDollar),
@@ -52,7 +52,7 @@ struct HotelPayView: View {
                 Spacer()
                 Text(Money.usd(app.hotelCash)).font(.ltHeadline)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
         }
         .safeAreaInset(edge: .bottom) {
             StickyBar { PillButton(title: "Review booking", enabled: accepted) { app.push(.hotelConfirm) } }

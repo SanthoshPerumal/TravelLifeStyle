@@ -107,8 +107,9 @@ struct LandingView: View {
 
     private var titleBlock: some View {
         Text("\(greeting), Alex")
-            .font(.title)
+            .font(.ltLargeTitle)
             .foregroundStyle(Theme.textPrimary)
+            .lineLimit(1).minimumScaleFactor(0.7)
             .padding(.top, 18)
     }
 
@@ -149,11 +150,11 @@ struct LandingView: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
-                        .font(.largeTitle)
+                        .font(.ltAmount)
                         .foregroundStyle(Theme.textPrimary)
                         .lineLimit(1).minimumScaleFactor(0.7)
                     Text("Rewards balance")
-                        .font(.ltBody).foregroundStyle(Theme.textSecondary)
+                        .font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 }
             }
 
@@ -171,9 +172,9 @@ struct LandingView: View {
             .padding(.horizontal, 14).frame(minHeight: 44)
             .background(Theme.rewardsStrip, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
-        .padding(18)
+        .padding(Theme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .card(radius: 20)
+        .card()
         .accessibilityElement(children: .combine)
     }
 
@@ -291,7 +292,7 @@ struct LandingView: View {
                 .font(.ltCaption)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(Money.usd(o.dealNightly))
-                        .font(.title3.bold()).foregroundStyle(Theme.textPrimary)
+                        .font(.title3).foregroundStyle(Theme.textPrimary)
                     Text(Money.usd(o.nightly))
                         .font(.ltCaption).strikethrough().foregroundStyle(Theme.textSecondary)
                     Text("/ night").font(.ltCaption).foregroundStyle(Theme.textSecondary)
@@ -320,7 +321,7 @@ struct LandingView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(18).card()
+                .padding(Theme.cardPadding).card()
             }
             .buttonStyle(.plain)
         }

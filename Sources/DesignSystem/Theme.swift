@@ -59,11 +59,13 @@ enum Theme {
     static let success = Color(hex: 0x1E7B34)
 
     // Layout
-    static let screenPadding: CGFloat = 20
+    static let screenPadding: CGFloat = 16
+    /// Inner padding of content cards.
+    static let cardPadding: CGFloat = 16
     /// Widest a page's content column grows on wide screens (iPhone Duo open,
     /// iPad) so text lines and photos keep phone-like proportions.
     static let readableWidth: CGFloat = 720
-    static let cardRadius: CGFloat = 22
+    static let cardRadius: CGFloat = 18
     static let pillRadius: CGFloat = 26
 
     /// 100 points = $1 (the rule used for every points calculation).
@@ -71,17 +73,23 @@ enum Theme {
 }
 
 // MARK: - Type scale
-// Built on Apple's text styles (SF Pro) so every size follows the HIG type
-// ramp and scales with Dynamic Type. Avoid `.system(size:)` for text.
+// Modelled on the Wells Fargo app: light, regular-weight titles and amounts,
+// semibold only for card/item names, and roomy 15 pt secondary text.
+// Built on Apple's text styles (SF Pro) so everything scales with Dynamic Type.
 // Default sizes: largeTitle 34 · title 28 · title2 22 · title3 20 · headline 17
-// semibold · body 17 · callout 16 · subheadline 15 · footnote 13 · caption 12 ·
-// caption2 11 (the HIG minimum).
+// semibold · body 17 · callout 16 · subheadline 15 · footnote 13 · caption 12.
 
 extension Font {
-    static let ltLargeTitle  = Font.largeTitle.bold()
-    static let ltTitle       = Font.title2.bold()
+    /// Page titles and the greeting (34 pt regular).
+    static let ltLargeTitle  = Font.largeTitle
+    /// Section titles such as "Hotel offers" or "Services" (22 pt regular).
+    static let ltTitle       = Font.title2
+    /// Balances and prices that lead a card (28 pt regular).
+    static let ltAmount      = Font.title
+    /// Card and item names (17 pt semibold).
     static let ltHeadline    = Font.headline
     static let ltBody        = Font.body
-    static let ltCaption     = Font.footnote
-    static let ltCaptionBold = Font.caption.weight(.semibold)
+    /// Secondary lines: account numbers, "Available balance", details (15 pt).
+    static let ltCaption     = Font.subheadline
+    static let ltCaptionBold = Font.subheadline.weight(.semibold)
 }

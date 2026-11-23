@@ -24,7 +24,7 @@ struct ItineraryView: View {
                 .padding(14)
                 .background(Theme.background, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
             // Date selector
             Text("Daily Flow").font(.ltTitle)

@@ -150,7 +150,7 @@ struct MenuItemSheet: View {
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
                     VStack(alignment: .leading, spacing: 10) {
                         Label(item.allergens.isEmpty ? "No major allergens"
@@ -163,7 +163,7 @@ struct MenuItemSheet: View {
                     }
                     .font(.ltBody).foregroundStyle(Theme.textBody)
                     .labelStyle(IconLabelStyle())
-                    .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
 
                     Text("Tell your server about any allergies. Dishes are prepared in a kitchen that handles all major allergens.")
                         .font(.ltCaption).foregroundStyle(Theme.textSecondary)

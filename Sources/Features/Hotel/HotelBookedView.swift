@@ -22,7 +22,7 @@ struct HotelBookedView: View {
                 KeyValueRow(key: "Guest name", value: app.guest.fullName)
                 KeyValueRow(key: "Points balance", value: Money.pts(app.points), bold: true)
             }
-            .padding(18).card()
+            .padding(Theme.cardPadding).card()
 
             // Unified itinerary preview
             VStack(alignment: .leading, spacing: 12) {
@@ -31,7 +31,7 @@ struct HotelBookedView: View {
                 Label("\(app.hotel.name) · \(app.search.nightsText)", systemImage: "bed.double")
             }
             .font(.ltBody).foregroundStyle(Theme.textBody)
-            .frame(maxWidth: .infinity, alignment: .leading).padding(18).card()
+            .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
         }
         .navigationBarBackButtonHidden(true)     // booking is done – no going back into checkout
         .safeAreaInset(edge: .bottom) {

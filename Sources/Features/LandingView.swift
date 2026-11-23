@@ -14,12 +14,12 @@ struct LandingView: View {
         init(_ id: String, _ icon: String, _ route: Route?) { self.id = id; self.icon = icon; self.route = route }
     }
     private let services = [
-        Service("Hotels", "bed.double", .hotelResults),
-        Service("Flights", "airplane", nil),
-        Service("Cars", "car", nil),
-        Service("Cruises", "ferry", nil),
-        Service("Experiences", "sparkles", nil),
-        Service("Events", "fork.knife", .diningRestaurant)
+        Service("Book flight", "airplane", nil),
+        Service("Book hotel", "building.2", .hotelResults),
+        Service("Book car", "car", nil),
+        Service("Reserve a table", "fork.knife", .diningRestaurant),
+        Service("Book event", "theatermasks", nil),
+        Service("Book experience", "ticket", nil)
     ]
 
     /// A promo card in the carousel.
@@ -214,23 +214,23 @@ struct LandingView: View {
     private var bookNow: some View {
         VStack(alignment: .leading, spacing: 14) {
             SectionTitle(text: "Travel, dining & experiences")
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
+            // Line icons over a label, no tile chrome.
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 22) {
                 ForEach(services) { s in
                     Button { if let r = s.route { app.push(r) } } label: {
-                        VStack(spacing: 8) {
+                        VStack(spacing: 10) {
                             Image(systemName: s.icon)
-                                .font(.system(size: 26, weight: .light))
+                                .font(.system(size: 30, weight: .light))
                                 .foregroundStyle(Theme.red)
-                                .frame(width: 64, height: 64)
-                                // hairline outline (no solid fill) + chevron cue = "tappable"
-                                .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                    .stroke(Theme.hairline, lineWidth: 1))
-                            Text(s.id).font(.system(size: 13, weight: .medium)).foregroundStyle(Theme.textPrimary)
+                                .frame(height: 36)
+                            Text(s.id)
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(Theme.textPrimary)
+                                .lineLimit(1).minimumScaleFactor(0.8)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .card(radius: 20)
-                        .opacity(s.route == nil ? 0.55 : 1)
+                        .padding(.vertical, 8)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

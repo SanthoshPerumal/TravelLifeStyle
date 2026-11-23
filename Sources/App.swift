@@ -9,6 +9,7 @@ enum Route: Hashable {
     case concierge, inspire, itinerary, preferences
     case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
     case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
+    case trip(String), booking(String), pastTrips
 }
 
 // MARK: - Shared state
@@ -140,6 +141,9 @@ struct LifestyleTravelApp: App {
         case .diningPay:        DiningPayView()
         case .diningReview:     DiningReviewView()
         case .diningConfirmed:  DiningConfirmedView()
+        case .trip(let id):     TripDetailView(tripID: id)
+        case .booking(let id):  BookingDetailView(bookingID: id)
+        case .pastTrips:        PastTripsView()
         }
     }
 }

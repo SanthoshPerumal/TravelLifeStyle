@@ -313,17 +313,44 @@ struct LandingView: View {
         VStack(alignment: .leading, spacing: 12) {
             SectionTitle(text: "Trips")
             Button { app.push(.itinerary) } label: {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Houston · \(Sample.dates)").font(.ltHeadline)
-                    HStack(spacing: 16) {
-                        status("Stay", on: app.hotelBooked)
-                        status("Dining", on: app.diningBooked)
+                // Live trip: same layout as `TripCard`, with booking status dots.
+                HStack(spacing: 14) {
+                    FillPhoto(name: "HotelCaribbean", width: 72, height: 72)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Sample.city).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                        Text(Sample.dates).font(.ltCaption).foregroundStyle(Theme.textBody)
+                        HStack(spacing: 16) {
+                            status("Stay", on: app.hotelBooked)
+                            status("Dining", on: app.diningBooked)
+                        }
                     }
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Theme.textSecondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(Theme.cardPadding).card()
             }
             .buttonStyle(.plain)
+
+            // Later trips, then a link to completed ones.
+            ForEach(Sample.upcomingTrips) { t in
+                Button { app.push(.trip(t.id)) } label: { TripCard(trip: t) }
+                    .buttonStyle(.plain)
+            }
+            if !Sample.pastTrips.isEmpty {
+                Button { app.push(.pastTrips) } label: {
+                    HStack {
+                        Label("Past trips", systemImage: "clock.arrow.circlepath").labelStyle(IconLabelStyle())
+                        Spacer()
+                        Text("\(Sample.pastTrips.count)").foregroundStyle(Theme.textSecondary)
+                        Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Theme.textSecondary)
+                    }
+                    .font(.ltBody).foregroundStyle(Theme.textPrimary)
+                    .padding(Theme.cardPadding).card()
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 

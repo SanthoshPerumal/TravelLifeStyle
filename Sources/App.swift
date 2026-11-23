@@ -11,6 +11,7 @@ enum Route: Hashable {
     case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
     case trip(String), booking(String), pastTrips, bookings
     case events, eventDetail(String), eventSeats(String), eventCheckout, eventConfirmed(String), myTickets, eventTickets(String)
+    case bookings, tripItem(TripItem)
 }
 
 // MARK: - Shared state
@@ -198,6 +199,8 @@ struct LifestyleTravelApp: App {
         case .eventConfirmed(let order): EventConfirmedView(orderID: order)
         case .myTickets:        MyTicketsView()
         case .eventTickets(let id): EventTicketsView(eventID: id)
+        case .bookings:         BookingsView()
+        case .tripItem(let item): TripItemDetailView(item: item)
         }
     }
 }

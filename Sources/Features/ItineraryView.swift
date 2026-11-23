@@ -3,12 +3,25 @@ import SwiftUI
 /// Day 4 – Trip itinerary (Concur-style): trip hero + per-day timeline.
 struct ItineraryView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     /// The date chips across the top (Dec 31 … Jan 5).
     private let days = ["31", "1", "2", "3", "4", "5"]
     @State private var selectedDay = "1"
+    /// Timeline entry shown in the secondary column on wide layouts.
+    @State private var selectedItem: TripItem = .flight
+
+    private var isSplit: Bool { sizeClass == .regular }
 
     var body: some View {
+        AdaptiveSplit {
+            timeline
+        } secondary: {
+            TripItemDetailView(item: selectedItem).id(selectedItem)
+        }
+    }
+
+    private var timeline: some View {
         Screen(title: "Itinerary") {
             // Trip hero with a flight sub-card
             VStack(alignment: .leading, spacing: 14) {
@@ -52,13 +65,13 @@ struct ItineraryView: View {
             }
 
             // Timeline – a leading dotted rail with cards.
-            timelineCard(icon: "airplane", title: "Flight to Houston", sub: "LAX → IAH · 11:15 AM") {
+            timelineCard(.flight, title: "Flight to Houston", sub: "LAX → IAH · 11:15 AM") {
                 HStack { Text("Boarding pass"); Spacer(); Image(systemName: "qrcode") }
                     .font(.ltCaption).foregroundStyle(Theme.textBody)
             }
-            timelineCard(icon: "bed.double", title: app.hotelBooked ? app.hotel.name : "Hotel check-in",
+            timelineCard(.hotel, title: app.hotelBooked ? app.hotel.name : "Hotel check-in",
                          sub: "Check-in 3:00 PM") { EmptyView() }
-            timelineCard(icon: "fork.knife", title: app.restaurant.name,
+            timelineCard(.dining, title: app.restaurant.name,
                          sub: "Dinner · \(app.slot?.time ?? app.dining.timeText) · party of \(app.party)") { EmptyView() }
 
             // Display-only actions (POC). See README for the note on these.
@@ -70,9 +83,21 @@ struct ItineraryView: View {
         }
     }
 
-    /// One timeline row: dot + connecting line + content card.
+    /// One timeline row: dot + connecting line + content card. Tapping it opens
+    /// the entry's details (pushed on a phone, in the secondary column when wide).
     private func timelineCard<Extra: View>(
-        icon: String, title: String, sub: String, @ViewBuilder extra: () -> Extra
+        _ item: TripItem, title: String, sub: String, @ViewBuilder extra: () -> Extra
+    ) -> some View {
+        Button {
+            if isSplit { selectedItem = item } else { app.push(.tripItem(item)) }
+        } label: {
+            timelineRow(item, title: title, sub: sub, extra: extra)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func timelineRow<Extra: View>(
+        _ item: TripItem, title: String, sub: String, @ViewBuilder extra: () -> Extra
     ) -> some View {
         HStack(alignment: .top, spacing: 14) {
             VStack(spacing: 4) {
@@ -80,11 +105,12 @@ struct ItineraryView: View {
                 Rectangle().fill(Theme.hairline).frame(width: 2).frame(maxHeight: .infinity)
             }
             VStack(alignment: .leading, spacing: 8) {
-                Label(title, systemImage: icon).font(.ltHeadline)
+                Label(title, systemImage: item.icon).font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                 Text(sub).font(.ltCaption).foregroundStyle(Theme.textSecondary)
                 extra()
             }
             .frame(maxWidth: .infinity, alignment: .leading).padding(16).card()
+            .splitSelection(isSplit && selectedItem == item)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

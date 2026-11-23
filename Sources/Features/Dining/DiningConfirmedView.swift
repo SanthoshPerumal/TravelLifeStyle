@@ -3,8 +3,27 @@ import SwiftUI
 /// Success: reservation record, unified trip preview and the new points balance.
 struct DiningConfirmedView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
+        // Wide layouts: reservation details on the left, the full trip itinerary on the right.
+        AdaptiveSplit {
+            reservation
+        } secondary: {
+            ItineraryView()
+        }
+        .navigationBarBackButtonHidden(true)     // reservation is done – no going back into checkout
+        .safeAreaInset(edge: .bottom) {
+            if sizeClass != .regular {
+                StickyBar {
+                    PillButton(title: "Done", kind: .secondary) { app.goHome() }
+                    PillButton(title: "View itinerary") { app.path = [.itinerary] }
+                }
+            }
+        }
+    }
+
+    private var reservation: some View {
         Screen(title: "Confirmed") {
             VStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill").font(.system(size: 56)).foregroundStyle(Theme.success)
@@ -46,13 +65,6 @@ struct DiningConfirmedView: View {
             .font(.ltBody).foregroundStyle(Theme.textBody)
             .labelStyle(IconLabelStyle())
             .frame(maxWidth: .infinity, alignment: .leading).padding(Theme.cardPadding).card()
-        }
-        .navigationBarBackButtonHidden(true)     // reservation is done – no going back into checkout
-        .safeAreaInset(edge: .bottom) {
-            StickyBar {
-                PillButton(title: "Done", kind: .secondary) { app.goHome() }
-                PillButton(title: "View itinerary") { app.path = [.itinerary] }
-            }
         }
     }
 }

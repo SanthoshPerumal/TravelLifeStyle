@@ -37,6 +37,21 @@ struct Suggestion: Identifiable, Hashable {
     let scene: SceneKind
 }
 
+/// One entry of the trip: shown on the itinerary timeline and the Bookings tab,
+/// and opened in the detail (secondary) pane.
+enum TripItem: String, CaseIterable, Identifiable, Hashable {
+    case flight, hotel, dining
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .flight: return "airplane"
+        case .hotel:  return "bed.double"
+        case .dining: return "fork.knife"
+        }
+    }
+}
+
 // MARK: - Sample data
 
 enum Sample {

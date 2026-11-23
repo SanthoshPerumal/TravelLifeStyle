@@ -27,15 +27,30 @@ struct Screen<Content: View>: View {
     let title: String
     @ViewBuilder var content: () -> Content
 
+    /// In the secondary column of an `AdaptiveSplit` the nav bar title belongs
+    /// to the primary column, so the title is drawn inline instead.
+    @Environment(\.isSplitDetail) private var isSplitDetail
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) { content() }
-                .readableColumn()
-                .padding(.bottom, 32)
+        let scroll = ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                if isSplitDetail {
+                    Text(title).font(.ltLargeTitle).foregroundStyle(Theme.textPrimary).padding(.top, 12)
+                }
+                content()
+            }
+            .readableColumn()
+            .padding(.bottom, 32)
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.large)
+
+        if isSplitDetail {
+            scroll
+        } else {
+            scroll
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.large)
+        }
     }
 }
 

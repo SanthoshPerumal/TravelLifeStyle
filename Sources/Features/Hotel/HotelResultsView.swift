@@ -3,11 +3,21 @@ import SwiftUI
 /// Hotel results for the current search, with filters and sorting.
 struct HotelResultsView: View {
     @EnvironmentObject var app: AppState
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     enum Sort: String, CaseIterable { case recommended = "Recommended", price = "Price", rating = "Rating" }
 
     @State private var sort: Sort = .recommended
     @State private var showFilters = false
+    /// Hotel shown in the secondary column on wide layouts (iPhone Duo open, iPad).
+    @State private var selectedID: String?
+
+    private var isSplit: Bool { sizeClass == .regular }
+    /// The selection, falling back to the first result when it was filtered out.
+    private var detailID: String {
+        if let id = selectedID, results.contains(where: { $0.id == id }) { return id }
+        return results.first?.id ?? Sample.hotels[0].id
+    }
 
     /// Quick filters shown as chips (the rest live in the filters sheet).
     private let quickAmenities: [Amenity] = [.breakfast, .freeParking, .petFriendly, .pool]
@@ -27,6 +37,15 @@ struct HotelResultsView: View {
     }
 
     var body: some View {
+        AdaptiveSplit {
+            list
+        } secondary: {
+            // Hotel details & rooms for the selected hotel.
+            HotelRoomsView(hotelID: detailID).id(detailID)
+        }
+    }
+
+    private var list: some View {
         Screen(title: "Hotels") {
             // Search summary – tap to change the search
             Button(action: editSearch) {
@@ -82,8 +101,8 @@ struct HotelResultsView: View {
                 ForEach(results) { h in
                     Button {
                         app.hotel = h
-                        app.push(.hotelRooms(h.id))
-                    } label: { row(h) }
+                        if isSplit { selectedID = h.id } else { app.push(.hotelRooms(h.id)) }
+                    } label: { row(h).splitSelection(isSplit && h.id == detailID) }
                     .buttonStyle(.plain)
                 }
             }

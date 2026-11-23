@@ -73,4 +73,20 @@ the fictional sample restaurants and dishes.
 | `DishMashedPotatoes` | https://unsplash.com/photos/ZcJOzhbr5Qk |
 | `DishLavaCake` | https://unsplash.com/photos/8lPKzLSWNgM |
 | `DishOldFashioned` | https://unsplash.com/photos/NFaDWUXM3mU |
+
+Event photos (Book event: discover, event details, tickets) are also from [Unsplash](https://unsplash.com) under the
+[Unsplash License](https://unsplash.com/license). They stand in for the fictional sample events.
+
+| Asset | Unsplash photo |
+|---|---|
+| `EventConcert` | https://unsplash.com/photos/stage-light-front-of-audience-NYrVisodQ2M |
+| `EventTheater` | https://unsplash.com/photos/red-curtain-stage-m3th3rIQ9-w |
+| `EventOrchestra` | https://unsplash.com/photos/orchestra-and-choir-performing-on-stage-J30aQDLRb_o |
+| `EventComedy` | https://unsplash.com/photos/black-and-gray-microphone-on-black-stand-QrqeusbpFMM |
+| `EventRock` | https://unsplash.com/photos/man-playing-electric-guitar-iIWDt0fXa84 |
+| `EventJazz` | https://unsplash.com/photos/person-playing-saxophone-dBWvUqBoOU8 |
+| `EventBasketball` | https://unsplash.com/photos/people-inside-a-basketball-gym-J_tbkGWxCH0 |
+| `EventFootball` | https://unsplash.com/photos/aerial-photo-of-football-field-during-daytime-Yzef5dRpwWg |
+| `EventSoccer` | https://unsplash.com/photos/people-watching-soccer-game-in-stadium-hQBIJsBtyBw |
+| `EventFestival` | https://unsplash.com/photos/people-gathering-on-green-grass-field-during-daytime-FUmDe-Bx1LA |
 | `RestaurantPrime` | https://unsplash.com/photos/afOvuzIgxPU |

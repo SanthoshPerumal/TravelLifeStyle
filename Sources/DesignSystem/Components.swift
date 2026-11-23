@@ -57,7 +57,9 @@ struct PillButton: View {
         Button(action: action) {
             Text(title)
                 .font(.ltHeadline)
-                .padding(.horizontal, fullWidth ? 0 : 28)
+                .lineLimit(1)
+                .fixedSize(horizontal: !fullWidth, vertical: false)   // short buttons never wrap
+                .padding(.horizontal, fullWidth ? 0 : 24)
                 .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 52)
                 .contentShape(Capsule())
         }

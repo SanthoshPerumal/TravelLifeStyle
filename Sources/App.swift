@@ -10,6 +10,7 @@ enum Route: Hashable {
     case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
     case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
     case trip(String), booking(String), pastTrips
+    case events, eventDetail(String), eventSeats(String), eventCheckout, eventConfirmed(String), myTickets, eventTickets(String)
 }
 
 // MARK: - Shared state
@@ -49,6 +50,16 @@ final class AppState: ObservableObject {
     @Published var selected: Set<String> = ["Hyatt", "United", "Italian"]
     @Published var priceLevel = 2
     @Published var seatPreference = "Aisle"
+
+    // Events
+    @Published var eventFilters = EventFilters()
+    @Published var favoriteEvents: Set<String> = ["nba-hou-la"]
+    /// Events with price-drop / on-sale alerts turned on.
+    @Published var eventAlerts: Set<String> = []
+    @Published var eventCart: EventCart?
+    @Published var tickets: [Ticket] = Sample.seedTickets
+    /// One-line confirmation toast ("Added to Apple Wallet").
+    @Published var toast: String?
     @Published var roomPreference = "High floor"
 
     // Derived values --------------------------------------------------------
@@ -74,6 +85,37 @@ final class AppState: ObservableObject {
     }
 
     func push(_ r: Route) { path.append(r) }
+
+    func toggleFavorite(_ id: String) {
+        if favoriteEvents.contains(id) { favoriteEvents.remove(id) } else { favoriteEvents.insert(id) }
+    }
+    func toggleAlert(_ e: Event) {
+        if eventAlerts.contains(e.id) {
+            eventAlerts.remove(e.id)
+            show("Alerts off for \(e.title)")
+        } else {
+            eventAlerts.insert(e.id)
+            show(e.isOnSale ? "We'll alert you if prices drop" : "We'll alert you when tickets go on sale")
+        }
+    }
+    func show(_ message: String) {
+        toast = message
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 2_200_000_000)
+            if toast == message { toast = nil }
+        }
+    }
+
+    /// Completes the event purchase and returns the order number.
+    func finishEventOrder() -> String {
+        guard let cart = eventCart else { return "" }
+        let order = "EV-\(Int.random(in: 50_000...99_999))"
+        points -= cart.payment == .points ? cart.pointsUsed : 0
+        tickets += cart.seats.enumerated().map { i, seat in
+            Ticket(id: "\(order)-\(i)", eventID: cart.eventID, seat: seat, price: cart.price(of: seat), orderID: order)
+        }
+        return order
+    }
     func goHome() { path.removeAll() }
 
     /// Commit points when the user finishes a booking.
@@ -115,6 +157,7 @@ struct LifestyleTravelApp: App {
                     }
             }
             .environmentObject(app)
+            .overlay(alignment: .top) { ToastView(message: app.toast) }
             .tint(Theme.button)   // nav bar & toolbar buttons (Back, Cancel, Done)
             .preferredColorScheme(.light)   // light mode only (per design brief)
         }
@@ -146,6 +189,13 @@ struct LifestyleTravelApp: App {
         case .trip(let id):     TripDetailView(tripID: id)
         case .booking(let id):  BookingDetailView(bookingID: id)
         case .pastTrips:        PastTripsView()
+        case .events:           EventsDiscoverView()
+        case .eventDetail(let id): EventDetailView(eventID: id)
+        case .eventSeats(let id):  SeatMapView(eventID: id)
+        case .eventCheckout:    EventCheckoutView()
+        case .eventConfirmed(let order): EventConfirmedView(orderID: order)
+        case .myTickets:        MyTicketsView()
+        case .eventTickets(let id): EventTicketsView(eventID: id)
         }
     }
 }

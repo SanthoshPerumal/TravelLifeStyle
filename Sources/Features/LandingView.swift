@@ -6,16 +6,19 @@ struct LandingView: View {
 
     /// One tile in the "Travel, dining & experiences" grid. `route == nil` means "not in this release".
     private struct Service: Identifiable {
-        let id: String; let icon: String; let route: Route?
-        init(_ id: String, _ icon: String, _ route: Route?) { self.id = id; self.icon = icon; self.route = route }
+        let id: String; let title: String; let icon: String; let tint: Color; let route: Route?
+        init(_ id: String, _ title: String, _ icon: String, _ tint: UInt32, _ route: Route?) {
+            self.id = id; self.title = title; self.icon = icon; self.tint = Color(hex: tint); self.route = route
+        }
     }
+    /// Each service has its own muted accent, shown on a soft tinted tile.
     private let services = [
-        Service("Book flight", "airplane", nil),
-        Service("Book hotel", "building.2.fill", .hotelSearch),
-        Service("Book car", "car.fill", nil),
-        Service("Reserve a table", "fork.knife", .diningSearch),
-        Service("Book event", "theatermasks.fill", .events),
-        Service("Book experience", "ticket.fill", nil)
+        Service("Book flight", "Flights", "airplane", 0x2F6FDE, nil),
+        Service("Book hotel", "Hotels", "bed.double.fill", 0x5856D6, .hotelSearch),
+        Service("Book car", "Cars", "car.fill", 0x0F8A80, nil),
+        Service("Reserve a table", "Dining", "fork.knife", 0xD9731A, .diningSearch),
+        Service("Book event", "Events", "theatermasks.fill", 0x8E4FD8, .events),
+        Service("Book experience", "Experiences", "binoculars.fill", 0x2E9457, nil)
     ]
 
     /// Offers carousel position (drives the page indicator and dot taps).
@@ -215,27 +218,41 @@ struct LandingView: View {
     private var bookNow: some View {
         VStack(alignment: .leading, spacing: 14) {
             SectionTitle(text: "Travel, dining & experiences")
-            // Line icons over a label, no tile chrome.
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 14) {
+            // White cards with a soft tinted icon tile; "Soon" on services not open yet.
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
                 ForEach(services) { s in
-                    Button { if let r = s.route { app.push(r) } } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: s.icon)
-                                .font(.title3)
-                                .symbolRenderingMode(.monochrome)
-                                .foregroundStyle(Theme.icon)
-                                .frame(height: 26)
-                            Text(s.id)
-                                .font(.subheadline)
-                                .foregroundStyle(Theme.textPrimary)
-                                .lineLimit(1).minimumScaleFactor(0.8)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 8)
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
+                    Button { if let r = s.route { app.push(r) } } label: { serviceTile(s) }
+                        .buttonStyle(ServiceTileStyle())
+                        .accessibilityLabel(s.route == nil ? "\(s.id), coming soon" : s.id)
                 }
+            }
+        }
+    }
+
+    private func serviceTile(_ s: Service) -> some View {
+        VStack(spacing: 10) {
+            Image(systemName: s.icon)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(s.tint)
+                .frame(width: 48, height: 48)
+                .background(s.tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            Text(s.title)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(Theme.textPrimary)
+                .lineLimit(1).minimumScaleFactor(0.75)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 6)
+        .card()
+        .overlay(alignment: .topTrailing) {
+            if s.route == nil {
+                Text("Soon")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(Theme.textSecondary)
+                    .padding(.horizontal, 6).padding(.vertical, 2)
+                    .background(Theme.background, in: Capsule())
+                    .padding(8)
             }
         }
     }
@@ -400,5 +417,14 @@ private struct CountBadge: View {
             .frame(minWidth: 17, minHeight: 17)
             .background(Theme.red, in: Circle())
             .overlay(Circle().stroke(.white, lineWidth: 1.5))
+    }
+}
+
+/// Service tiles dip slightly when pressed.
+private struct ServiceTileStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1)
+            .animation(.spring(duration: 0.2), value: configuration.isPressed)
     }
 }

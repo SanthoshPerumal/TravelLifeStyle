@@ -130,15 +130,10 @@ struct LandingView: View {
     /// a small card thumbnail beside the balance, and a rewards points strip.
     private var balanceCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 4) {
-                Text("Autograph Journey Visa (…4821)")
-                    .font(.headline)
-                    .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(1).minimumScaleFactor(0.8)
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Theme.textSecondary)
-            }
+            Text("Autograph Journey Visa (…4821)")
+                .font(.headline)
+                .foregroundStyle(Theme.textPrimary)
+                .lineLimit(1).minimumScaleFactor(0.8)
 
             HStack(alignment: .center) {
                 Image("AutographJourneyCard")
@@ -166,9 +161,6 @@ struct LandingView: View {
                 Text("\(app.points.formatted()) rewards points")
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Theme.textSecondary)
             }
             .foregroundStyle(Theme.textPrimary)
             .padding(.horizontal, 14).frame(minHeight: 44)

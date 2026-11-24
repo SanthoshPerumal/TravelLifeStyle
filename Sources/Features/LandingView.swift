@@ -70,7 +70,6 @@ struct LandingView: View {
             .ignoresSafeArea()
         }
         .toolbar(.hidden, for: .navigationBar)          // custom glass header instead
-        .safeAreaInset(edge: .bottom) { tabBar }        // floating Liquid Glass tab bar
     }
 
     // MARK: Header (glass controls)
@@ -380,33 +379,6 @@ struct LandingView: View {
             Circle().fill(on ? Theme.success : Theme.hairline).frame(width: 8, height: 8)
             Text(name).font(.ltCaption).foregroundStyle(Theme.textBody)
         }
-    }
-
-    // MARK: Floating tab bar
-
-    private var tabBar: some View {
-        HStack {
-            tabItem("house", "Home", active: true) {}
-            tabItem("safari", "Explore", active: false) { app.push(.concierge) }
-            tabItem("suitcase", "Bookings", active: false) { app.push(.bookings) }
-            tabItem("person", "Profile", active: false) { app.push(.preferences) }
-        }
-        .padding(.horizontal, 10).padding(.vertical, 8)
-        .glass(in: Capsule())
-        .padding(.horizontal, 28).padding(.bottom, 4)
-    }
-
-    private func tabItem(_ icon: String, _ label: String, active: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 2) {
-                // Filled symbol for the selected tab, outline otherwise (iOS tab bar convention).
-                Image(systemName: active ? icon + ".fill" : icon).font(.title3)
-                Text(label).font(.caption2.weight(.medium))
-            }
-            .foregroundStyle(active ? Theme.red : Theme.textSecondary)
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(.plain)
     }
 }
 

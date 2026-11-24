@@ -20,7 +20,8 @@ enum Route: Hashable {
 @MainActor
 final class AppState: ObservableObject {
 
-    // Navigation stack
+    // Navigation: the selected root tab and the screens pushed over it
+    @Published var tab: AppTab = .home
     @Published var path: [Route] = []
 
     // Rewards
@@ -116,7 +117,7 @@ final class AppState: ObservableObject {
         }
         return order
     }
-    func goHome() { path.removeAll() }
+    func goHome() { path.removeAll(); tab = .home }
 
     /// Commit points when the user finishes a booking.
     func finishHotel() {
@@ -151,7 +152,7 @@ struct LifestyleTravelApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $app.path) {
-                LandingView()
+                RootView()
                     .navigationDestination(for: Route.self) { route in
                         destination(for: route)
                     }

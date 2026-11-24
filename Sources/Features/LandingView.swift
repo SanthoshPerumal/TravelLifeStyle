@@ -128,48 +128,69 @@ struct LandingView: View {
 
     /// Account-style tile for the Autograph Journey card: name and last four,
     /// a small card thumbnail beside the balance, and a rewards points strip.
+    /// Dark "premium card" panel in the Autograph card's own colours: near-black
+    /// with a burgundy glow and gold accents, white balance for high contrast.
     private var balanceCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Autograph Journey Visa (…4821)")
-                .font(.headline)
-                .foregroundStyle(Theme.textPrimary)
-                .lineLimit(1).minimumScaleFactor(0.8)
-
-            HStack(alignment: .center) {
+        let gold = Color(hex: 0xD9B77E)
+        return VStack(alignment: .leading, spacing: 18) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("AUTOGRAPH JOURNEY")
+                        .font(.caption.weight(.semibold)).tracking(1.2)
+                        .foregroundStyle(gold)
+                    Text("Visa Signature ••4821")
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                Spacer(minLength: 12)
                 Image("AutographJourneyCard")
                     .resizable()
                     .aspectRatio(432.0 / 276.0, contentMode: .fit)
                     .scaleEffect(1.03) // trims the white matte baked into the artwork's corners
-                    .frame(width: 104)
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                    .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
-                    .accessibilityLabel("Autograph Journey card")
-                Spacer()
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
-                        .font(.ltAmount)
-                        .foregroundStyle(Theme.textPrimary)
-                        .lineLimit(1).minimumScaleFactor(0.7)
-                    Text("Rewards balance")
-                        .font(.ltCaption).foregroundStyle(Theme.textSecondary)
-                }
+                    .frame(width: 92)
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).stroke(.white.opacity(0.18), lineWidth: 0.5))
+                    .shadow(color: .black.opacity(0.45), radius: 8, y: 4)
+                    .accessibilityHidden(true)
             }
 
-            HStack(spacing: 10) {
-                Image(systemName: "star")
-                    .font(.callout)
-                Text("\(app.points.formatted()) rewards points")
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Money.usd(app.points / Theme.pointsPerDollar) + ".50")
+                    .font(.system(size: 40, weight: .regular))
+                    .foregroundStyle(.white)
+                    .lineLimit(1).minimumScaleFactor(0.7)
+                Text("Rewards balance")
+                    .font(.ltCaption).foregroundStyle(.white.opacity(0.65))
             }
-            .foregroundStyle(Theme.textPrimary)
+
+            HStack(spacing: 8) {
+                Image(systemName: "star.fill").font(.footnote).foregroundStyle(gold)
+                Text("\(app.points.formatted()) points")
+                    .font(.subheadline.weight(.semibold)).foregroundStyle(.white)
+                Spacer(minLength: 8)
+                Text("\(Theme.pointsPerDollar) pts = $1")
+                    .font(.caption).foregroundStyle(.white.opacity(0.6))
+            }
             .padding(.horizontal, 14).frame(minHeight: 44)
-            .background(Theme.rewardsStrip, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(.white.opacity(0.1), lineWidth: 0.5))
         }
-        .padding(Theme.cardPadding)
+        .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .card()
+        .background {
+            let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+            ZStack {
+                LinearGradient(colors: [Color(hex: 0x2B1D20), Color(hex: 0x141113)],
+                               startPoint: .topLeading, endPoint: .bottomTrailing)
+                RadialGradient(colors: [Color(hex: 0x8C2232).opacity(0.55), .clear],
+                               center: .topTrailing, startRadius: 0, endRadius: 260)
+            }
+            .clipShape(shape)
+            .overlay(shape.stroke(gold.opacity(0.25), lineWidth: 0.75))
+            .shadow(color: Color(hex: 0x2B1D20).opacity(0.25), radius: 16, y: 8)
+        }
         .accessibilityElement(children: .combine)
+        .accessibilityLabel("Autograph Journey Visa ending 4821. Rewards balance \(Money.usd(app.points / Theme.pointsPerDollar)).50, \(app.points.formatted()) points")
     }
 
     // MARK: Fargo search bar

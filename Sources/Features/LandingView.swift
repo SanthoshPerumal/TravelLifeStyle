@@ -236,6 +236,19 @@ struct LandingView: View {
                 .foregroundStyle(s.tint)
                 .frame(width: 48, height: 48)
                 .background(s.tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                // "Soon" badge pinned to the icon tile, so it never covers it on narrow columns.
+                .overlay(alignment: .topTrailing) {
+                    if s.route == nil {
+                        Text("Soon")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(Theme.textSecondary)
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(Theme.card, in: Capsule())
+                            .overlay(Capsule().stroke(Theme.hairline, lineWidth: 1))
+                            .fixedSize()
+                            .offset(x: 18, y: -8)
+                    }
+                }
             Text(s.title)
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(Theme.textPrimary)
@@ -245,16 +258,6 @@ struct LandingView: View {
         .padding(.vertical, 16)
         .padding(.horizontal, 6)
         .card()
-        .overlay(alignment: .topTrailing) {
-            if s.route == nil {
-                Text("Soon")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(Theme.textSecondary)
-                    .padding(.horizontal, 6).padding(.vertical, 2)
-                    .background(Theme.background, in: Capsule())
-                    .padding(8)
-            }
-        }
     }
 
     // MARK: Hotel offers

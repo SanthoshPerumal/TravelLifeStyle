@@ -8,7 +8,7 @@ struct MyTicketsView: View {
     /// Event IDs with tickets, in date order.
     private var eventIDs: [String] {
         let ids = Array(Set(app.tickets.map(\.eventID)))
-        return ids.compactMap(Sample.event).filter { $0.isPast == past }
+        return ids.compactMap { Sample.event($0) }.filter { $0.isPast == past }
             .sorted { past ? $0.date > $1.date : $0.date < $1.date }.map(\.id)
     }
 

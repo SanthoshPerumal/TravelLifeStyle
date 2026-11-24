@@ -1,6 +1,6 @@
 # Travel LifeStyle
 
-A SwiftUI iOS app prototype for booking hotels and dining with rewards points, featuring a concierge, inspiration feed, itinerary and preferences.
+A SwiftUI iOS app prototype for booking hotels and dining with rewards points, featuring Fargo (a travel assistant chat), inspiration feed, itinerary and preferences.
 
 ## Requirements
 - Xcode 27+

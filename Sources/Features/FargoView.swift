@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Day 1 – Concierge chat. Scripted replies (no backend) with tappable picks.
-struct ConciergeView: View {
+/// Day 1 – Fargo, the travel assistant chat. Scripted replies (no backend) with tappable picks.
+struct FargoView: View {
     @EnvironmentObject var app: AppState
 
     private struct Message: Identifiable {
@@ -13,7 +13,7 @@ struct ConciergeView: View {
     }
 
     @State private var messages: [Message] = [
-        Message(fromUser: false, text: "Hi Alex! I can help you find a hotel or a table. What are you planning?")
+        Message(fromUser: false, text: "Hi Alex, I'm Fargo! I can help you find a hotel or a table. What are you planning?")
     ]
     @State private var input = ""
     private let prompts = ["Hotel in Houston", "Dinner for 4", "Inspire me"]
@@ -33,7 +33,7 @@ struct ConciergeView: View {
             }
             // Input bar (glass control layer)
             HStack {
-                TextField("Message Concierge", text: $input).padding(.leading, 6)
+                TextField("Message Fargo", text: $input).padding(.leading, 6)
                     .submitLabel(.send).onSubmit { send(input) }
                 Button { send(input) } label: {
                     Image(systemName: "arrow.up.circle.fill").font(.title).foregroundStyle(Theme.button)
@@ -42,7 +42,7 @@ struct ConciergeView: View {
             .padding(10).glass(in: Capsule()).padding(Theme.screenPadding)
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("Concierge")
+        .navigationTitle("Fargo")
         .navigationBarTitleDisplayMode(.inline)
     }
 

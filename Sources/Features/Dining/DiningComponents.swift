@@ -363,7 +363,7 @@ struct PartySizeSheet: View {
                 Section {
                     CounterRow(title: "Guests", subtitle: "Including children", value: $draft, range: 1...DiningSearch.maxParty)
                 } footer: {
-                    Text("For more than \(DiningSearch.maxParty) guests, ask Concierge to arrange a private event.")
+                    Text("For more than \(DiningSearch.maxParty) guests, ask Fargo to arrange a private event.")
                 }
             }
             .navigationTitle("Party size")

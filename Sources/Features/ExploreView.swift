@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Explore tab: ask the concierge, get trip ideas, and browse what to book.
+/// Explore tab: ask Fargo, get trip ideas, and browse what to book.
 struct ExploreView: View {
     @EnvironmentObject var app: AppState
 
@@ -16,15 +16,15 @@ struct ExploreView: View {
 
     var body: some View {
         Screen(title: "Explore") {
-            // Concierge
-            Button { app.push(.concierge) } label: {
+            // Fargo
+            Button { app.push(.fargo) } label: {
                 HStack(spacing: 14) {
                     Image(systemName: "bubble.left.and.text.bubble.right.fill")
                         .font(.title3).foregroundStyle(.white)
                         .frame(width: 48, height: 48)
                         .background(Theme.button, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Ask Concierge").font(.ltHeadline).foregroundStyle(Theme.textPrimary)
+                        Text("Ask Fargo").font(.ltHeadline).foregroundStyle(Theme.textPrimary)
                         Text("Plan a trip, find a table or get ideas").font(.ltCaption).foregroundStyle(Theme.textSecondary)
                     }
                     Spacer(minLength: 0)

@@ -6,7 +6,7 @@ import Combine
 /// Every destination in the app. Using one enum + a single NavigationStack path
 /// keeps navigation type-safe and lets us jump back to Home in one line.
 enum Route: Hashable {
-    case concierge, inspire, itinerary, preferences
+    case fargo, inspire, itinerary, preferences
     case hotelSearch, hotelResults, hotelRooms(String), hotelGuest, hotelPay, hotelConfirm, hotelBooked
     case diningSearch, diningResults, diningRestaurant, diningMenu, diningGuest, diningPay, diningReview, diningConfirmed
     case trip(String), booking(String), pastTrips, bookings
@@ -168,7 +168,7 @@ struct LifestyleTravelApp: App {
     @ViewBuilder
     private func destination(for route: Route) -> some View {
         switch route {
-        case .concierge:        ConciergeView()
+        case .fargo:            FargoView()
         case .inspire:          InspireView()
         case .itinerary:        ItineraryView()
         case .preferences:      PreferencesView()

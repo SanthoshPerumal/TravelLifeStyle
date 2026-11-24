@@ -31,11 +31,11 @@ struct LandingView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Tinted top section: header, greeting and concierge search.
+                // Tinted top section: header, greeting and "Ask Fargo" search.
                 VStack(alignment: .leading, spacing: 22) {
                     header
                     titleBlock
-                    conciergeSearch
+                    fargoSearch
                 }
                 .padding(.horizontal, Theme.screenPadding)
                 .padding(.bottom, 24)
@@ -180,14 +180,14 @@ struct LandingView: View {
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: Concierge search bar
+    // MARK: Fargo search bar
 
-    private var conciergeSearch: some View {
+    private var fargoSearch: some View {
         HStack(spacing: 12) {
-            Button { app.push(.concierge) } label: {
+            Button { app.push(.fargo) } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass").foregroundStyle(Theme.textSecondary)
-                    Text("Need help? Ask Concierge").foregroundStyle(Theme.textBody)
+                    Text("Need help? Ask Fargo").foregroundStyle(Theme.textBody)
                         .lineLimit(1).minimumScaleFactor(0.8)
                     Spacer()
                 }
@@ -198,7 +198,7 @@ struct LandingView: View {
             }
             .buttonStyle(.plain)
 
-            Button { app.push(.concierge) } label: {
+            Button { app.push(.fargo) } label: {
                 Image(systemName: "bubble.left.and.text.bubble.right.fill")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.icon)
@@ -208,7 +208,7 @@ struct LandingView: View {
                     .overlay(alignment: .topTrailing) { CountBadge(count: 1).offset(x: 6, y: -6) }
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Concierge chat, 1 new message")
+            .accessibilityLabel("Fargo chat, 1 new message")
         }
     }
 
@@ -382,7 +382,7 @@ struct LandingView: View {
     }
 }
 
-/// Small red count bubble used on the bell and concierge chat icons.
+/// Small red count bubble used on the bell and Fargo chat icons.
 private struct CountBadge: View {
     let count: Int
     var body: some View {

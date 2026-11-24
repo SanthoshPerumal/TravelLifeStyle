@@ -115,7 +115,7 @@ struct DiningRestaurantView: View {
                 }
             } else {
                 Text(app.dining.party > r.maxParty
-                     ? "\(r.name) seats up to \(r.maxParty). Ask Concierge about a private event."
+                     ? "\(r.name) seats up to \(r.maxParty). Ask Fargo about a private event."
                      : "Fully booked on \(app.dining.dateText). Try another date.")
                     .font(.ltBody).foregroundStyle(Theme.textBody)
             }

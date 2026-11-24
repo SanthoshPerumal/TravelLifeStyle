@@ -10,6 +10,8 @@ struct LandingView: View {
     @State private var detail: Route = .itinerary
 
     private var isSplit: Bool { sizeClass == .regular }
+    /// Outline the landing item whose screen is beside it (only while Home is the tab).
+    private var showsSelection: Bool { isSplit && app.tab == .home }
 
     /// Phone: push the screen. Wide layout: show it beside the landing page.
     private func open(_ route: Route) {
@@ -262,7 +264,7 @@ struct LandingView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
                 ForEach(services) { s in
                     Button { if let r = s.route { open(r) } } label: {
-                        serviceTile(s).splitSelection(isSplit && s.route == detail, radius: Theme.cardRadius)
+                        serviceTile(s).splitSelection(showsSelection && s.route == detail, radius: Theme.cardRadius)
                     }
                     .buttonStyle(ServiceTileStyle())
                     .accessibilityLabel(s.route == nil ? "\(s.id), coming soon" : s.id)
@@ -312,7 +314,7 @@ struct LandingView: View {
                     ForEach(offers) { o in
                         Button { open(.hotelRooms(o.id)) } label: {
                             offerCard(o)
-                                .splitSelection(isSplit && detail == .hotelRooms(o.id))
+                                .splitSelection(showsSelection && detail == .hotelRooms(o.id))
                         }
                         .buttonStyle(.plain)
                     }
@@ -393,14 +395,14 @@ struct LandingView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(Theme.cardPadding).card()
-                .splitSelection(isSplit && detail == .itinerary)
+                .splitSelection(showsSelection && detail == .itinerary)
             }
             .buttonStyle(.plain)
 
             // Later trips, then a link to completed ones.
             ForEach(Sample.upcomingTrips) { t in
                 Button { open(.trip(t.id)) } label: {
-                    TripCard(trip: t).splitSelection(isSplit && detail == .trip(t.id))
+                    TripCard(trip: t).splitSelection(showsSelection && detail == .trip(t.id))
                 }
                 .buttonStyle(.plain)
             }
